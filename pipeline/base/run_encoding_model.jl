@@ -142,6 +142,10 @@ end
 using JLD2;
 save(
     "neural_results.jld2",
+    using JLD2;
+save(
+    "neural_results.jld2",
+    "results",
     (
         kernel = results_K,
         error = results_E,
@@ -149,6 +153,15 @@ save(
         error_norm = results_Enorm,
         vexpl = results_vexpl
 
-    ),
-    "results"
+    )
+)
+
+    (
+        kernel = results_K,
+        error = results_E,
+        kernel_norm = results_Knorm,
+        error_norm = results_Enorm,
+        vexpl = results_vexpl
+
+    )
 )
