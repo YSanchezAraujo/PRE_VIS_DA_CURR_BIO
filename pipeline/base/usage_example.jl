@@ -1,7 +1,7 @@
 using PyPlot;
-include("/Users/ysa/Desktop/preprocess_pipeline/base/encoding_model.jl")
-include("/Users/ysa/Desktop/preprocess_pipeline/base/preprocess.jl")
-include("/Users/ysa/Desktop/preprocess_pipeline/base/design_matrix.jl")
+include("/Users/ysa/Desktop/pipeline/base/encoding_model.jl")
+include("/Users/ysa/Desktop/pipeline/base/preprocess.jl")
+include("/Users/ysa/Desktop/pipeline/base/design_matrix.jl")
 
 # set parameters
 day = 10 # session number to load
