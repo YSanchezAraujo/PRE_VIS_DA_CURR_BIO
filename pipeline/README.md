@@ -4,3 +4,5 @@
 3. start up julia, then press the key with ]
 4. run: activate .
 5. run: instantiate
+6. to get out of the package manager just hit backspace / delete
+7. now you should have all packages to run the files in the base directory
