@@ -54,8 +54,8 @@ end
     lr = logistic(lr_pre_transform)
 
     choice_kern = zeros(typeof(nu), n_samp)
-    for s in 1:n_ses
-        choice_kern[ST[s]:SE[s]] .= side_choice_kern(choice[ST[s]:SE[s]], lr, NS[s], typeof(nu))
+    for ses in 1:n_ses
+        choice_kern[ST[ses]:SE[ses]] .= side_choice_kern(choice[ST[ses]:SE[ses]], lr, NS[ses], typeof(nu))
     end
     
     for ses in 2:n_ses
@@ -65,7 +65,7 @@ end
     coh_alpha = tanh(alpha)
     means = vec(
         sum(
-            [X[:, 1] tanh.(X[:, 2:3], alpha) ./ coh_alpha choice_kern] .* hcat(betas[sesmap]...)';
+            [X[:, 1] tanh.(X[:, 2:3] * alpha) ./ coh_alpha choice_kern] .* hcat(betas[sesmap]...)';
                 dims=2)
         )
     
