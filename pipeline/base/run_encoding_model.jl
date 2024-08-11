@@ -1,7 +1,7 @@
 using PyPlot;
-include("/Users/ysa/Desktop/pipeline/base/encoding_model.jl")
-include("/Users/ysa/Desktop/pipeline/base/preprocess.jl")
-include("/Users/ysa/Desktop/pipeline/base/design_matrix.jl")
+include("/Users/ysa/Desktop/preprocess_pipeline/base/encoding_model.jl")
+include("/Users/ysa/Desktop/preprocess_pipeline/base/preprocess.jl")
+include("/Users/ysa/Desktop/preprocess_pipeline/base/design_matrix.jl")
 
 
 function scalar_summary_stats(weights, event_names, func)
@@ -138,11 +138,12 @@ for mouse in mouse_ids
     setindex!(results_vexpl, vexpl, mouse)
 end
 
+save_path = "/Users/ysa/Desktop/pipeline/saved_results"
+
 # save the results
 using JLD2;
 save(
-    "neural_results.jld2",
-    "results",
+    joinpath(save_path, "neural_results.jld2"),
     (
         kernel = results_K,
         error = results_E,
@@ -150,5 +151,6 @@ save(
         error_norm = results_Enorm,
         vexpl = results_vexpl
 
-    )
+    ),
+    "results"
 )
