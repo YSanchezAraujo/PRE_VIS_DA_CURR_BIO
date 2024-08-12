@@ -1,5 +1,4 @@
 using PyPlot;
-using PyPlot;
 include(joinpath(@__DIR__, "pipeline/base/encoding_model.jl"))
 include(joinpath(@__DIR__, "pipeline/base/preprocess.jl"))
 include(joinpath(@__DIR__, "pipeline/base/design_matrix.jl"))
