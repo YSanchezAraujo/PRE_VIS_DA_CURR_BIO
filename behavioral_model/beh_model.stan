@@ -1,5 +1,5 @@
 functions {
-    vector side_choice_kern(int[] choice, real alpha, int N) {
+    vector side_choice_kern(array[] int choice, real alpha, int N) {
         vector[N] choice_kernel = rep_vector(0, N);
 
 
@@ -11,13 +11,13 @@ functions {
 
     }
 
-    vector ses_side_choice_kern(int[] choice,
+    vector ses_side_choice_kern(array[] int choice,
                              real alpha,
                              int N,
                              int S,
-                             int[] ST,
-                             int[] SE,
-                             int[] NS) {
+                             array[] int ST,
+                             array[] int SE,
+                             array[] int NS) {
 
         vector[N] all_choice_k;
 
@@ -44,17 +44,18 @@ data {
 
     matrix[N, P] X;
 
-    int NS[S];
+    array[S] int NS;
 
-    int ST[S];
+    array[S] int ST;
 
-    int SE[S];
+    array[S] int SE;
 
-    int<lower=0, upper=1> y[N];
+    array[N] int<lower=0, upper=1> y;
 
-    int<lower=-1, upper=1> choice[N];
+    array[N] int<lower=-1, upper=1> choice;
+    
+    array[N] int<lower=1, upper=S> sesmap;
 
-    int<lower=1, upper=S> sesmap[N];
 }
 
 parameters {
@@ -62,7 +63,7 @@ parameters {
 
     vector<lower=0>[P+1] sigma;
 
-    vector[P+1] betas[S];
+    array[S] vector[P + 1] betas;
 
     real<lower=0>alpha_pr;
 
