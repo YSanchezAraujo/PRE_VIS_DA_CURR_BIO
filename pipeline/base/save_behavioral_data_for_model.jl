@@ -41,7 +41,7 @@ for mouse_id in [collect(13:16); collect(26:43)]
     y = fy.(choice)
     session_end = cumsum(beh_data.trials)
     session_start = [1; session_end[1:end-1] .+ 1]
-    sesmap = Int64.(vcat((ones.(beh_data.trials) .* beh_data.day)...))
+    sesmap = Int64.(vcat((ones.(beh_data.trials) .* collect(1:length(beh_data.day))...)))
 
     npzwrite(
         joinpath(save_path, "behavior_data_mouseid_$(mouse_id).npy"),
