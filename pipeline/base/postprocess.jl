@@ -1,4 +1,4 @@
-include("/Users/ysa/Desktop/pipeline/base/utility.jl");
+include(joinpath(@__DIR__, "pipeline/base/utility.jl"))
 using JLD2;
 
 # load results
