@@ -145,6 +145,7 @@ save_path = "/Users/ysa/Desktop/pipeline/saved_results"
 using JLD2;
 save(
     joinpath(save_path, "neural_results.jld2"),
+     "results",
     (
         kernel = results_K,
         error = results_E,
@@ -152,6 +153,5 @@ save(
         error_norm = results_Enorm,
         vexpl = results_vexpl
 
-    ),
-    "results"
+    )
 )
