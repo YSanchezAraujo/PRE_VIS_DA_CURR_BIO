@@ -1,6 +1,4 @@
-using JLD2;
-include("/Users/ysa/Desktop/pipeline/base/preprocess.jl");
-
+include(joinpath(@__DIR__, "pipeline/base/preprocess.jl"))
 
 function mouse_behavioral_data_all_days(base_path, mouse_id)
     session_paths = get_session_paths(base_path, mouse_id)
