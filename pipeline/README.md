@@ -7,6 +7,12 @@
 6. to get out of the package manager just hit backspace / delete
 7. now you should have all packages to run the files in the base directory
 
+**Note** The instructions above assume you will be running scripts interactively, if instead you want to run julia from the command line, and want to use the project you can use (for example): 
+
+`julia --project=/path/to/project run_encoding_model.jl`
+
+where `/path/to/project` is the directory where the `.toml` files live.
+
 # Set up STAN
 Ideally you have access to a computing cluster and you ask an admin to install STAN on the cluster, then just pip install cmdstan. If you don't have a computing cluster you will need to install STAN and one of the interfaces to use it (R, Python, Julia, Matlab) see: https://mc-stan.org/users/interfaces/ 
 
