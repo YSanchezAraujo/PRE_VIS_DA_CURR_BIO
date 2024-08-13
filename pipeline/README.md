@@ -22,9 +22,6 @@ If you have conda installed, a local install of cmdstanpy should be enough:
 
 `conda create --prefix /path/to/install -c conda-forge cmdstanpy`
 
-# Alternative to STAN
-If you can't install STAN for whatever reason but were successful in installing Julia, there is an equivalent model that can be run solely with Julia using the Turing package. Please note: **I recommend you try to get STAN up and running, the Turing model may not be as optimized, and thus will take much longer to run**
-
 # Reproducing results
 After you have set up your compute enviornment and downloaded the data, you should:
 1. run `run_encoding_model.jl`
