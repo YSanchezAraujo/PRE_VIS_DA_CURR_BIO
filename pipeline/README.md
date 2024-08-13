@@ -16,8 +16,6 @@ where `/path/to/project` is the directory where the `.toml` files live.
 **Note** Interactive useage: each time you want to run code interactively you will need to cd into the dictory with the `.toml` files, and follow steps 3, 4,and 6 above. 
 
 # Set up STAN
-Ideally you have access to a computing cluster and you ask an admin to install STAN on the cluster, then just pip install cmdstan. If you don't have a computing cluster you will need to install STAN and one of the interfaces to use it (R, Python, Julia, Matlab) see: https://mc-stan.org/users/interfaces/ 
-
 If you have conda installed, a local install of cmdstanpy should be enough: 
 
 `conda create --prefix /path/to/install -c conda-forge cmdstanpy`
