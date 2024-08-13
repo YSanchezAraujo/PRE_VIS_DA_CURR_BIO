@@ -26,5 +26,5 @@ If you have conda installed, a local install of cmdstanpy should be enough:
 After you have set up your compute enviornment and downloaded the data, you should:
 1. run `run_encoding_model.jl`
 2. run `save_behavioral_data_for_model.jl`
-3. use either STAN or Turing to run the behavioral model
-4. Aggregate and save results (script to appear)
+3. use STAN to run the behavioral model
+4. aggregate and save results (script to appear)
