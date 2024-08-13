@@ -2,6 +2,7 @@ import os
 import numpy as np
 from cmdstanpy import CmdStanModel
 
+# example usage for single animal
 data_path = "/usr/people/yaraujjo/";
 
 mouse_id = 26
