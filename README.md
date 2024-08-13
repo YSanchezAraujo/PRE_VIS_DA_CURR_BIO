@@ -3,4 +3,6 @@ Pre-existing visual responses in a projection-defined dopamine population explai
 
 * **bioRxiv link:** https://www.biorxiv.org/content/10.1101/2024.02.26.582199v1.abstract
 
-* See `README.md` in the pipeline directory for instructions on how to run the analysis from the paper. 
+* See `README.md` in the pipeline directory for instructions on how to run the analysis from the paper.
+
+* Software requirments: Python, Julia, STAN, and ideally a Linux based system. 
