@@ -69,7 +69,7 @@ parameters {
 
     real lam_coh_alpha;
 
-    real<lower=0>eta;
+    real<lower=0.1>eta;
 
     vector[P+1] mu_init;
 
