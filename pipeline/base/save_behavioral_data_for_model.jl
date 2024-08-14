@@ -27,10 +27,16 @@ function mouse_behavioral_data_all_days(base_path, mouse_id)
 
 end
 
-base_path = "/Users/ysa/Desktop/Subjects"
-save_path = "/Users/ysa/Desktop/pipeline/saved_results"
 fy(c) = c == 1 ? 1 : 0
+base_path = "/Users/ysa/Desktop/Subjects"
 
+save_path = joinpath(@__DIR__, "saved_results")
+if !isdir(save_path)
+    mkpath(save_path)
+    println("directory created at: $path")
+else
+    println("directory already exists at: $path")
+end
 
 for mouse_id in [collect(13:16); collect(26:43)]
     beh_data = mouse_behavioral_data_all_days(base_path, mouse_id)
