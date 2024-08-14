@@ -33,11 +33,11 @@ data_for_stan = {
 
 fit = model.sample(data=data_for_stan, chains=4, iter_warmup=1000, iter_sampling=1000)
 
-# extract betas and compute mean over all samples
-betas = fit.stan_variable("betas").mean(0)
-# save them for later processing
-unique_dir_name = f"betas_mouseid_{mouse}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+save_var_names  = ["betas", "nu", "sigma", "eta", "alpha", "coh_alpha", "L_Sigma"]
+unique_dir_name = f"mouseid_{mouse}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 unique_save_path = os.path.join(save_path, unique_dir_name)
 os.makedirs(unique_save_path, exist_ok=True)
-np.save(os.path.join(unique_save_path, f"betas_mouseid_{mouse}.npy"), betas)
-print(f"Betas saved in directory: {unique_save_path}")
+
+for svn in save_var_names:
+    model_var = fit.stan_variables(svn)
+    np.save(os.path.join(unique_save_path, f"{svn}_mouseid_{mouse}.npy"), model_var)
