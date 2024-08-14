@@ -15,6 +15,7 @@ save_path = "/usr/people/yaraujjo/beh_model_fits"
 
 mouse_ids = [13, 14, 15, 16, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43]
 model = CmdStanModel(stan_file=os.path.join(data_path, "beh_model.stan"))
+save_var_names  = ["betas", "nu", "sigma", "eta", "alpha", "coh_alpha", "L_Sigma"]
 
 for mouse in mouse_ids:
     data = np.load(os.path.join(data_path, f"behavior_data_mouseid_{mouse}.npy"))
@@ -35,10 +36,10 @@ for mouse in mouse_ids:
     fit = model.sample(data=data_for_stan, chains=4, iter_warmup=1000, iter_sampling=1000)
 
     # extract betas and compute mean over all samples
-    betas = fit.stan_variable("betas").mean(0)
-    # save them for later processing
-    unique_dir_name = f"betas_mouseid_{mouse}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    unique_dir_name = f"mouseid_{mouse}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
     unique_save_path = os.path.join(save_path, unique_dir_name)
     os.makedirs(unique_save_path, exist_ok=True)
-    np.save(os.path.join(unique_save_path, f"betas_mouseid_{mouse}.npy"), betas)
-    print(f"Betas saved in directory: {unique_save_path}")
+    
+    for svn in save_var_names:
+        model_var = fit.stan_variables(svn)
+        np.save(os.path.join(unique_save_path, f"{svn}_mouseid_{mouse}.npy"), model_var)
