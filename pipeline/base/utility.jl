@@ -71,30 +71,6 @@ function resample_data(times, values; rate=0.02, return_time=false, kind="linear
     return interp_fn_data(regular_grid)
 end
 
-
-function exp_time_filt(y, alpha)
-    n = length(y)
-    filt = zeros(n)
-    x = zeros(Float64, n)
-
-    for j in 1:n
-        if y[j] == 1
-            x[j] = 1
-        elseif y[j] == 0
-            x[j] = -1
-        end
-    end
-
-    filt[1] = x[1]
-
-    for j in 2:n
-        filt[j] = alpha * x[j] + (1 - alpha) * filt[j - 1]
-    end
-
-
-    return [0.; filt[1:n-1]]
-end
-
 _safe_index(x, i) = length(x[i]) == 0 ? 0 : x[i]
 
 np = pyimport("numpy");
@@ -133,88 +109,6 @@ function auc_trapz_pos_plus_neg(y; x=nothing, dx=1/10)
     auc_pos = auc_trapz_pos(y; x=x, dx=dx)
     auc_neg = auc_trapz_neg(y; x=x, dx=dx)
     return auc_pos + auc_neg
-end
-
-
-
-"""
-these functions are used to load the data from STAN files, 
-might be deprecated
-""";
-pd = pyimport("pandas")
-
-function collect_estimates_matrix(base_path, file_name, param_name, iter_j, iter_k, idx_col)
-    load_file = joinpath(base_path, file_name)
-    data = pd.read_csv(load_file, comment="#", index_col=idx_col)
-
-    mean_est = zeros((iter_j, iter_k))
-    five_p = similar(mean_est)
-    fifty_p = similar(mean_est)
-    ninefive_p = similar(mean_est)
-    mcse = similar(mean_est)
-
-    for j in 1:iter_j
-        for k in 1:iter_k
-            name = string(param_name, "[", j, ",", k, "]")
-            row_data = get(data.loc, (name))
-
-            mean_est[j, k] = row_data.Mean
-            five_p[j, k] = row_data[4]
-            fifty_p[j, k] = row_data[5]
-            ninefive_p[j, k] = row_data[6]
-            mcse[j, k] = row_data.MCSE
- 
-        end
-    end
-
-    return mean_est, five_p, fifty_p, ninefive_p, mcse
-end
-
-function collect_estimates_vector(base_path, file_name, param_name, iter_j, idx_col)
-    load_file = joinpath(base_path, file_name)
-    data = pd.read_csv(load_file, comment="#", index_col=idx_col)
-
-    mean_est = zeros(iter_j)
-    five_p = similar(mean_est)
-    fifty_p = similar(mean_est)
-    ninefive_p = similar(mean_est)
-    mcse = similar(mean_est)
-
-
-    for j in 1:iter_j
-        name = string(param_name, "[", j, "]")
-        row_data = get(data.loc, (name))
-
-        mean_est[j] = row_data.Mean
-        five_p[j] = row_data[4]
-        fifty_p[j] = row_data[5]
-        ninefive_p[j] = row_data[6]
-        mcse[j] = row_data.MCSE
-
-    end
-
-    return mean_est, five_p, fifty_p, ninefive_p, mcse
-end
-
-function collect_estimates_real(base_path, file_name, param_name, idx_col)
-    load_file = joinpath(base_path, file_name)
-    data = pd.read_csv(load_file, comment="#", index_col=idx_col)
-
-    mean_est = 0.0
-    five_p = 0.0
-    fifty_p = 0.0
-    ninefive_p = 0.0
-    mcse = 0.0
-    
-    row_data = get(data.loc, param_name)
-
-    mean_est = row_data.Mean
-    five_p = row_data[4]
-    fifty_p = row_data[5]
-    ninefive_p = row_data[6]
-    mcse = row_data.MCSE
-
-    return mean_est, five_p, fifty_p, ninefive_p, mcse
 end
 
 
