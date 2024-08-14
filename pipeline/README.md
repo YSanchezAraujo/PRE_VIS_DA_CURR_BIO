@@ -18,7 +18,16 @@ where `/path/to/project` is the directory where the `.toml` files live.
 # Set up STAN
 If you have conda installed, a local install of cmdstanpy should be enough: 
 
+This will createa a new environment (recommended, but take note of your system's storage!)
+
 `conda create --prefix /path/to/install -c conda-forge cmdstanpy`
+
+if instead you want to install it into an already established enviornment, remove the prefix: 
+
+`conda install -c conda-forge cmdstanpy`
+
+# Python
+Note that the command above will install a new conda environment with it's own version of python, so if you didn't have it installed (unlikely) you now do. If you have an old version of python that 
 
 # Reproducing results
 After you have set up your compute enviornment and downloaded the data, you should:
