@@ -50,9 +50,11 @@ function make_features(n_samples, start_indices, window)
     f0[start_indices] .= 1.0
     F = zeros(n_samples, window)
     F[:, 1] = f0
+    
     for f_i in 2:window
         F[:, f_i] = circshift(f0, f_i-1)
     end
+    
     return F
 end
 
