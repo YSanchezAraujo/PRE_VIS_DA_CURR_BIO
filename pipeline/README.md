@@ -1,6 +1,6 @@
 # Set up compute enviornment in Julia
 1. Install Julia from https://julialang.org/downloads/
-2. Clone the repo and cd into this directory
+2. Clone the repo and cd into this directory (because this is where the `.toml` files are)
 3. start up julia, then press the key with ]
 4. run: `activate .`
 5. run: `instantiate`
