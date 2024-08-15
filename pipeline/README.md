@@ -33,5 +33,5 @@ Note that the command above will install a new conda environment with it's own v
 After you have set up your compute enviornment and downloaded the data, you should:
 1. run `run_encoding_model.jl`
 2. run `save_behavioral_data_for_model.jl`
-3. use STAN to run the behavioral model
+3. use STAN to run the behavioral model, see `run_behavioral_model_single_mouse.py` and `submit_stan_job.slurm` files
 4. aggregate and save results (script to appear)
