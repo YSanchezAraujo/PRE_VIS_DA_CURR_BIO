@@ -1,5 +1,7 @@
 include(joinpath(@__DIR__, "preprocess.jl"))
 include(joinpath(@__DIR__, "constants.jl"))
+include(joinpath(@__DIR__, "correlation_functions.jl"))
+
 using JLD2;
 
 # load results
