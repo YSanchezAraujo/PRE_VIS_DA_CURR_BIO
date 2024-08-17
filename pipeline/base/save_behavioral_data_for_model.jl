@@ -1,7 +1,8 @@
-include(joinpath(@__DIR__, "pipeline/base/preprocess.jl"))
+include(joinpath(@__DIR__, "preprocess.jl"))
+include(joinpath(@__DIR__, "constants.jl"))
 
-function mouse_behavioral_data_all_days(base_path, mouse_id)
-    session_paths = get_session_paths(base_path, mouse_id)
+function mouse_behavioral_data_all_days(data_path, mouse_id)
+    session_paths = get_session_paths(data_path, mouse_id)
     num_sessions = maximum(session_paths.session)
     fx(x) = x == 0 ? false : true
     non_pretrain_session = fx.(session_paths.session)
@@ -28,18 +29,20 @@ function mouse_behavioral_data_all_days(base_path, mouse_id)
 end
 
 fy(c) = c == 1 ? 1 : 0
-base_path = "/Users/ysa/Desktop/Subjects"
+base_path = "/jukebox/witten/yoel"
+data_path = "/jukebox/witten/ONE/alyx.internationalbrainlab.org/wittenlab/Subjects"
 
-save_path = joinpath(@__DIR__, "saved_results")
+save_path = joinpath(base_path, "saved_results")
 if !isdir(save_path)
     mkpath(save_path)
-    println("directory created at: $path")
+    println("directory created at: $save_path")
 else
-    println("directory already exists at: $path")
+    println("directory already exists at: $save_path")
 end
 
+# NOTE: HAVE TO FIX SOMETHING HERE WITH ALIGNING THE DAYS
 for mouse_id in [collect(13:16); collect(26:43)]
-    beh_data = mouse_behavioral_data_all_days(base_path, mouse_id)
+    beh_data = mouse_behavioral_data_all_days(data_path, mouse_id)
     X = vcat(beh_data.data...)
     choice = vcat(beh_data.choice...)
     y = fy.(choice)

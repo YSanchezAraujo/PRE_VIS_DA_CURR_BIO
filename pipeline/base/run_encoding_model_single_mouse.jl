@@ -1,6 +1,7 @@
 include(joinpath(@__DIR__, "encoding_model.jl"))
 include(joinpath(@__DIR__, "preprocess.jl"))
 include(joinpath(@__DIR__, "design_matrix.jl"))
+include(joinpath(@__DIR__, "constants.jl"))
 
 
 function scalar_summary_stats(weights, event_names, func)
@@ -70,7 +71,7 @@ function fit_mouse_all_days(mouse_id, param_set, event_names, summary_func; max_
         Y = vcat(trunc_desmat_items.Y...)
 
         for (reg, rlabel) in enumerate(reg_labels) # 3 regions, NAcc, DMS, DLS in that order
-            model_fit = bayes_ridge(X, zscore(Y[:, reg]))
+            model_fit = bayes_ridge(X, zscore(Y[:, reg]); tol=1e-4)
 
             # extract the weights in the standard basis
             W = desmat_items.basis * reshape(model_fit.w[2:end], (nfunc, n_stim * n_sets)) # first index is the intercept
@@ -117,29 +118,9 @@ param_set = (
     base_path = "/jukebox/witten/ONE/alyx.internationalbrainlab.org/wittenlab/Subjects" # whereever you have downloaded the data
 );
 
-event_names = [
-    "stim_right", "stim_left", 
-    "act_right_correct", "act_right_incorrect",
-    "act_left_correct", "act_left_incorrect", 
-    "reward_right_correct", "reward_right_incorrect", 
-    "reward_left_correct", "reward_left_incorrect"
-];
-
-mouse_ids = [collect(13:16); collect(26:43)];
-results_K = Dict();
-results_E = Dict();
-results_Knorm = Dict();
-results_Enorm = Dict();
-results_vexpl = Dict();
-
-for mouse in mouse_ids
-    K, E, Knorm, Enorm, vexpl = fit_mouse_all_days(mouse, param_set, event_names, norm);
-    setindex!(results_K, K, mouse)
-    setindex!(results_E, E, mouse)
-    setindex!(results_Knorm, Knorm, mouse)
-    setindex!(results_Enorm, Enorm, mouse)
-    setindex!(results_vexpl, vexpl, mouse)
-end
+mouse_idx = parse(Int, ARGS[1]);
+mouse = [collect(14:16); collect(26:43)][mouse_idx];
+K, E, Knorm, Enorm, vexpl = fit_mouse_all_days(mouse, param_set, event_names, norm);
 
 save_path = "/jukebox/witten/yoel/saved_results"
 if !isdir(save_path)
@@ -149,18 +130,15 @@ else
     println("Directory already exists at: $save_path")
 end
 
-
-# save the results
 using JLD2;
 save(
-    joinpath(save_path, "neural_results.jld2"),
-     "results",
+    joinpath(save_path, "neural_results_mouseid_$(mouse).jld2"),
+    "results",
     (
-        kernel = results_K,
-        error = results_E,
-        kernel_norm = results_Knorm,
-        error_norm = results_Enorm,
-        vexpl = results_vexpl
-
+        kernel = K,
+        error = E,
+        kernel_norm = Knorm,
+        error_norm = Enorm,
+        vexpl = vexpl
     )
 )

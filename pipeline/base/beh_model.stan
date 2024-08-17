@@ -73,7 +73,7 @@ parameters {
 
     vector[P+1] mu_init;
 
-    real<lower=0>nu;
+    real<lower=1>nu;
 }
 
 transformed parameters {

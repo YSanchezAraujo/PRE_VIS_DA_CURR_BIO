@@ -139,7 +139,7 @@ function make_design_matrix_items(data, window::Int64, nfunc::Int64; acausal_act
             reward_right_incorrect = reward_right_incorrect, 
             reward_left_correct = reward_left_correct, 
             reward_left_incorrect = reward_left_incorrect,
-            basis=basis)
+            basis = basis)
 end
 
 function design_matrix(design_matrix_items)

@@ -2,6 +2,17 @@ import NaNMath;
 using LinearAlgebra;
 using PyCall;
 using SparseArrays;
+using NPZ;
+using JLD2;
+using StatsBase;
+using DataFrames;
+using RobustModels;
+
+mutable struct MouseBehavior
+    avg::Matrix
+    ci275::Matrix
+    ci975::Matrix
+end
 
 mpl = pyimport("matplotlib.lines");
 
@@ -112,57 +123,6 @@ function auc_trapz_pos_plus_neg(y; x=nothing, dx=1/10)
 end
 
 
-dms_contra_map = Dict(
-    13 => "stim_left",
-    14 => "stim_left",
-    15 => "stim_left",
-    16 => "stim_left",
-    26 => "stim_right",
-    27 => "stim_right",
-    28 => "stim_right",
-    29 => "stim_right",
-    30 => "stim_left",
-    31 => "stim_left",
-    32 => "stim_left",
-    33 => "stim_left",
-    34 => "stim_left",
-    35 => "stim_left",
-    36 => "stim_left",
-    37 => "stim_right",
-    38 => "stim_right",
-    39 => "stim_left",
-    40 => "stim_right",
-    41 => "stim_right",
-    42 => "stim_left",
-    43 => "stim_left", 
-)
-
-dms_ipsi_map = Dict(
-    13 => "stim_right",
-    14 => "stim_right",
-    15 => "stim_right",
-    16 => "stim_right",
-    26 => "stim_left",
-    27 => "stim_left",
-    28 => "stim_left",
-    29 => "stim_left",
-    30 => "stim_right",
-    31 => "stim_right",
-    32 => "stim_right",
-    33 => "stim_right",
-    34 => "stim_right",
-    35 => "stim_right",
-    36 => "stim_right",
-    37 => "stim_left",
-    38 => "stim_left",
-    39 => "stim_right",
-    40 => "stim_left",
-    41 => "stim_left",
-    42 => "stim_right",
-    43 => "stim_right", 
-)
-
-
 function true_psychometric(choice, contrast, coh)
     coh_idx = contrast .== coh
 
@@ -266,4 +226,70 @@ function rsquared(y, yhat)
     y_bar = mean(y)
     quo = sum((y .- yhat).^2) / sum((y .- y_bar).^2)
     return 1 - quo
+end
+
+function binary_union_not_nan(x, y)
+    x_nan_ind = findall(isnan.(x))
+    y_nan_ind = findall(isnan.(y))
+    nan_ind = union(x_nan_ind, y_nan_ind)
+    return setdiff(1:length(x), nan_ind)
+end
+
+function nancor(x, y)
+    use_ind = binary_union_not_nan(x, y)
+    return cor(x[use_ind], y[use_ind])
+end
+
+function zscore_transform(u)
+    dt = fit(StatsBase.ZScoreTransform, u)
+    return StatsBase.transform(dt, u)
+end
+
+function robust_nanlm(x, y; ztransform=true)
+    use_ind = binary_union_not_nan(x, y)
+
+    if ztransform
+        y_use = zscore_transform(y[use_ind])
+        x_use = zscore_transform(x[use_ind])
+    else
+        y_use = y[use_ind]
+        x_use = x[use_ind]
+    end
+
+    rlmdf = DataFrame(dep_var=y_use, indep_var=x_use);
+
+    robust_model = RobustModels.rlm(@formula(dep_var ~ 1 + indep_var), rlmdf,
+        MEstimator{HuberLoss}(); 
+        method=:chol, 
+        initial_scale=10.0,
+        correct_leverage=true,
+        maxiter=10000,
+    )
+
+    pval = coeftable(robust_model).cols[4][2]
+    b0, beta = coef(robust_model)
+
+    r2_api = StatsBase.r2(robust_model, :devianceratio)
+    cor_api = NaN
+    
+    try
+        cor_api = sign(beta) * sqrt(r2_api)
+    catch 
+        nothing
+    end
+
+    return (
+        b0 = b0,
+        beta = beta,
+        cor = cor_api,
+        r2 = r2_api,
+        pval = pval
+    )
+end
+
+function get_qc(base_path, mouseid)
+    session_paths = get_session_paths(base_path, mouseid)
+    fx(x) = x == 0 ? false : true
+    non_pretrain_session = fx.(session_paths.session)
+    return session_paths[non_pretrain_session, [:session, :QC_NAcc, :QC_DMS, :QC_DLS]]
 end

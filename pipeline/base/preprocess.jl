@@ -3,6 +3,7 @@ include("utility.jl");
 using NPZ;
 using DataFrames;
 using StatsBase;
+using JSON;
 
 function get_session_paths(base_path, fip; stable_sub_path_str = "alf")
     path_info = []
@@ -19,20 +20,29 @@ function get_session_paths(base_path, fip; stable_sub_path_str = "alf")
         end
   
         multiple_tries = length(numbered_dirs) > 1 ? true : false
-        
+
+        if neural_missing == 1
+            qc_dict = Dict("NAcc" => NaN, "DMS" => NaN, "DLS" => NaN)
+        else
+            qc_dict = JSON.parsefile(joinpath(op, numbered_dirs[1], stable_sub_path_str, "FP_QC.json"))
+        end
+
         push!(path_info, 
                 (
                     joinpath(op, numbered_dirs[1], stable_sub_path_str),
                     session_number, 
                     multiple_tries,
-                    neural_missing
+                    neural_missing,
+                    qc_dict["NAcc"],
+                    qc_dict["DMS"],
+                    qc_dict["DLS"]
                 )
         )
         
         neural_missing = 0
     end
 
-    return DataFrame(path_info, [:path, :session, :multi, :neural_missing])
+    return DataFrame(path_info, [:path, :session, :multi, :neural_missing, :QC_NAcc, :QC_DMS, :QC_DLS])
 end
 
 function get_neural_data(path)
