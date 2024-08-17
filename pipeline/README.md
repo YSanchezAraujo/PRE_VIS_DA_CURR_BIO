@@ -34,4 +34,6 @@ After you have set up your compute enviornment and downloaded the data, you shou
 1. run `run_encoding_model.jl`
 2. run `save_behavioral_data_for_model.jl`
 3. use STAN to run the behavioral model, see `run_behavioral_model_single_mouse.py` and `submit_stan_job.slurm` files
-4. aggregate and save results (script to appear)
+4. run `aggregate_beh_results.jl`
+5. run `aggregate_encoding_results.jl`
+6. in the file `postprocess.jl` the computations will reproduce the results in the paper (in progress)
