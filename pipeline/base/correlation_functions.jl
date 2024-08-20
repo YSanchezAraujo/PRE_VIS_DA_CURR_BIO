@@ -7,7 +7,7 @@ function contra_weights_dms_conmod(kernel_norm, behavior, mouseid)
         kernel_norm[mouseid]["DMS"][dms_contra_map[mouseid]][:, 1]
     )
 
-    beh = behavior[mouseid].avg[:, beh_dms_contra_map[mouseid]] * beh_multiplier[mouseid]
+    beh = behavior[mouseid].avg[:, beh_dms_contra_map[mouseid]] * beh_multiplier_contra[mouseid]
 
     return neu, beh
 end
@@ -33,7 +33,7 @@ function ipsi_weights_dms_conmod(kernel_norm, behavior, mouseid)
         kernel_norm[mouseid]["DMS"][dms_ipsi_map[mouseid]][:, 1]
     )
 
-    beh = behavior[mouseid].avg[:, beh_dms_ipsi_map[mouseid]] * (-1*beh_multiplier[mouseid])
+    beh = behavior[mouseid].avg[:, beh_dms_ipsi_map[mouseid]] * (-1 * beh_multiplier_contra[mouseid])
 
     return neu, beh
 end
@@ -59,7 +59,7 @@ function contra_weights_dls_conmod(kernel_norm, behavior, mouseid)
         kernel_norm[mouseid]["DLS"][dms_ipsi_map[mouseid]][:, 1]
     )
 
-    beh = behavior[mouseid].avg[:, beh_dms_ipsi_map[mouseid]] * (-1 * beh_multiplier[mouseid])
+    beh = behavior[mouseid].avg[:, beh_dms_ipsi_map[mouseid]] * (-1 * beh_multiplier_contra[mouseid])
 
     return neu, beh
 end
@@ -85,7 +85,7 @@ function ipsi_weights_dls_conmod(kernel_norm, behavior, mouseid)
         kernel_norm[mouseid]["DLS"][dms_contra_map[mouseid]][:, 1]
     )
 
-    beh = behavior[mouseid].avg[:, beh_dms_contra_map[mouseid]] * beh_multiplier[mouseid]
+    beh = behavior[mouseid].avg[:, beh_dms_contra_map[mouseid]] * beh_multiplier_contra[mouseid]
 
     return neu, beh
 end
@@ -113,7 +113,7 @@ function contra_weights_nacc_conmod(kernel_norm, behavior, mouseid)
         kernel_norm[mouseid]["NAcc"][dms_ipsi_map[mouseid]][:, 1]
     )
 
-    beh = behavior[mouseid].avg[:, beh_dms_ipsi_map[mouseid]] * (-1 * beh_multiplier[mouseid])
+    beh = behavior[mouseid].avg[:, beh_dms_ipsi_map[mouseid]] * (-1 * beh_multiplier_contra[mouseid])
 
     return neu, beh
 end
@@ -139,7 +139,7 @@ function ipsi_weights_nacc_conmod(kernel_norm, behavior, mouseid)
         kernel_norm[mouseid]["NAcc"][dms_contra_map[mouseid]][:, 1]
     )
 
-    beh = behavior[mouseid].avg[:, beh_dms_contra_map[mouseid]] * beh_multiplier[mouseid]
+    beh = behavior[mouseid].avg[:, beh_dms_contra_map[mouseid]] * beh_multiplier_contra[mouseid]
 
     return neu, beh
 end
