@@ -1,17 +1,18 @@
 using PyPlot;
-include(joinpath(@__DIR__, "pipeline/base/encoding_model.jl"))
-include(joinpath(@__DIR__, "pipeline/base/preprocess.jl"))
-include(joinpath(@__DIR__, "pipeline/base/design_matrix.jl"))
+include(joinpath(@__DIR__, "encoding_model.jl"))
+include(joinpath(@__DIR__, "preprocess.jl"))
+include(joinpath(@__DIR__, "design_matrix.jl"))
+include(joinpath(@__DIR__, "constants.jl"))
 
 
 # set parameters
-day = 10 # session number to load
+day = 0 # session number to load
 nfunc = 16 # number of basis functions
 window = 50 # number of time bins for temporal kernels, spans 1 second
-mouse_id = 27 
+mouse_id = 26
 n_stim = 4 # 4 stimulus levels: 6.25%, 12.5%, 25%, 100%
 n_sets = 10 # this corresponds to the number of events in the design matrix, see event names below
-base_path = "/Users/ysa/Desktop/Subjects" # whereever you have downloaded the data
+base_path = "/jukebox/witten/ONE/alyx.internationalbrainlab.org/wittenlab/Subjects" # whereever you have downloaded the data
 
 # load data and create design matrices
 data = mouse_session_data(base_path, mouse_id, day);
@@ -34,13 +35,6 @@ reg_labels = ["NAcc", "DMS", "DLS"]
 W = desmat_items.basis * reshape(model_fit.w[2:end], (nfunc, n_stim * n_sets))
 S = desmat_items.basis * reshape(sqrt.(diag(model_fit.covar)[2:end]), (nfunc, n_stim * n_sets))
 
-event_names = [
-    "stim_right", "stim_left", 
-    "act_right_correct", "act_right_incorrect",
-     "act_left_correct", "act_left_incorrect", 
-     "reward_right_correct", "reward_right_incorrect", 
-     "reward_left_correct", "reward_left_incorrect"
-]
 
 # put the estimated model estimates in a less error prone data structure
 kernels = weights_by_event(W, n_stim, event_names)

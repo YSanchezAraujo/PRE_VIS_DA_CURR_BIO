@@ -58,6 +58,9 @@ function nanstd(X, dim)
     return drop_dim(mapslices(NaNMath.std, X, dims=dim))
 end
 
+
+nansem(X, dim) = vec(nanstd(X, dim)) ./ sqrt(size(X, dim))
+
 function split_inds(arr, n::Int64)
     return Vector.(collect(Iterators.partition(arr, n)))
 end
@@ -235,6 +238,8 @@ function binary_union_not_nan(x, y)
     return setdiff(1:length(x), nan_ind)
 end
 
+union_not_nan(l_vec) = setdiff(1:length(l_vec[1]), union([findall(isnan.(l)) for l in l_vec]...))
+
 function nancor(x, y)
     use_ind = binary_union_not_nan(x, y)
     return cor(x[use_ind], y[use_ind])
@@ -291,5 +296,48 @@ function get_qc(base_path, mouseid)
     session_paths = get_session_paths(base_path, mouseid)
     fx(x) = x == 0 ? false : true
     non_pretrain_session = fx.(session_paths.session)
-    return session_paths[non_pretrain_session, [:session, :QC_NAcc, :QC_DMS, :QC_DLS]]
+    pretrain_session = .!non_pretrain_session
+    
+    return (
+        train = session_paths[non_pretrain_session, [:session, :QC_NAcc, :QC_DMS, :QC_DLS]],
+        pretrain = session_paths[pretrain_session, [:session, :QC_NAcc, :QC_DMS, :QC_DLS]]
+        )
+end
+
+
+function split_day(days)
+    f2(x) = (x > 0) && (x < 11) ? 1 : 2
+
+    f3(x) = ((x > 0) && (x < 8)) ? 1 : ( ((x > 7) && (x < 15)) ? 2 : ( (x > 14) ? 3 : nothing  ) )
+
+    f4(x) = (
+        ((x > 0) && (x < 6)) ? 1 : ( 
+            ((x > 5) && (x < 11)) ? 2 : ( ((x > 10) && ( x < 16)) ? 3 : ( (x > 15) ? 4 : nothing )  ) 
+        )
+    )
+
+    return (
+        d2 = f2.(days),
+        d3 = f3.(days),
+        d4 = f4.(days)
+        )
+end
+
+function df_for_stats(beh_weights, neural_weights, mouse_ids; max_days=20)
+    beh_vec = vec(beh_weights)
+    day0_neu_vec = vec(hcat([ones(max_days) * d0v for d0v in neural_weights]...))
+    day_vec = vec(hcat([1:max_days for f in mouse_ids]...))
+    daysplits = split_day(day_vec)
+    mouse_id_vec = vec(hcat([ones(Int64, max_days) * f for f in mouse_ids]...))
+    use_inds = union_not_nan([beh_vec, day0_neu_vec, mouse_id_vec, day_vec])
+
+    return DataFrame(
+        contrast_weight = beh_vec[use_inds],
+        day = day_vec[use_inds],
+        mouse = mouse_id_vec[use_inds],
+        neural_strength = day0_neu_vec[use_inds],
+        day_split2 = daysplits.d2[use_inds],
+        day_split3 = daysplits.d3[use_inds],
+        day_split4 = daysplits.d4[use_inds],
+    )
 end

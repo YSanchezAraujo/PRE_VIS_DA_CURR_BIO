@@ -202,3 +202,75 @@ function truncate_design_matrix(desmat, data, window)
         reward_idx = new_reward_indices
         )
 end
+
+"""
+from this point on the code is for day 0 (pre-exposure) result
+""";
+function make_design_matrix_items_day0(data, window::Int64, nfunc::Int64; acausal_action_lag=0)
+    n_samples = size(data.neural, 1)
+    convals = [0.0625, 0.125, 0.25, 1.]
+    start_peaks, end_peaks, dt = 1, window, 1
+
+    basis = gen_basis([nfunc, start_peaks, end_peaks, dt])
+
+    stim_right = sparse.([
+        make_features(n_samples, 
+                      data.stim_idx[data.behavior.contrast_right .== v], 
+                      window) * basis for v in convals
+    ])
+
+    stim_left = sparse.([
+        make_features(n_samples, 
+                      data.stim_idx[data.behavior.contrast_left .== v], 
+                      window) * basis for v in convals
+    ])
+
+    return (stim_right = stim_right, 
+            stim_left = stim_left,
+            basis = basis)
+end
+
+function design_matrix_day0(design_matrix_items)
+    SR = hcat(design_matrix_items.stim_right...)
+    SL = hcat(design_matrix_items.stim_left...)
+    return add_intercept([SR SL])
+end
+
+
+function truncate_design_matrix_day0(desmat, data, window)
+    z = collect(zip(data.stim_idx[1:end-1], data.stim_idx[1:end-1] .+ (window - 1)))
+    z_final_stim = data.stim_idx[end]
+    z_final_stim_end = data.stim_idx[end] .+ (window - 1)
+    z_final_stim_end = z_final_stim_end > size(data.neural, 1) ? size(data.neural, 1) : z_final_stim_end
+
+    push!(z, (z_final_stim, z_final_stim_end))
+
+    truncated_desmat = []
+    truncated_Y = []
+
+    # Calculate new indices for the events in the truncated vectors
+    new_stim_indices = []
+    cumulative_length = 0
+
+    for i in 1:length(z)
+        start_idx, end_idx = z[i]
+
+        push!(truncated_desmat, desmat[start_idx:end_idx, :])
+        push!(truncated_Y, data.neural[start_idx:end_idx, :])
+
+        length_segment = end_idx - start_idx + 1
+
+        # calculate new indices
+        new_stim_idx = data.stim_idx[(data.stim_idx .>= start_idx) .& (data.stim_idx .<= end_idx)] .- start_idx .+ 1 .+ cumulative_length
+        
+        append!(new_stim_indices, new_stim_idx)
+        
+        cumulative_length += length_segment
+    end
+
+    return (
+        X = truncated_desmat, 
+        Y = truncated_Y, 
+        stim_idx = new_stim_indices,
+        )
+end

@@ -118,8 +118,11 @@ param_set = (
     base_path = "/jukebox/witten/ONE/alyx.internationalbrainlab.org/wittenlab/Subjects" # whereever you have downloaded the data
 );
 
-mouse_idx = parse(Int, ARGS[1]);
-mouse = [collect(14:16); collect(26:43)][mouse_idx];
+#mouse_idx = parse(Int, ARGS[1]);
+#mouse = [collect(13:16); collect(26:43)][mouse_idx];
+
+#for mouse in [collect(13:16); collect(26:43)]
+for mouse in collect(33:43)
 K, E, Knorm, Enorm, vexpl = fit_mouse_all_days(mouse, param_set, event_names, norm);
 
 save_path = "/jukebox/witten/yoel/saved_results"
@@ -142,3 +145,4 @@ save(
         vexpl = vexpl
     )
 )
+end

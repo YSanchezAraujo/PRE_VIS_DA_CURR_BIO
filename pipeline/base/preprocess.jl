@@ -16,7 +16,7 @@ function get_session_paths(base_path, fip; stable_sub_path_str = "alf")
         session_number = npzread(joinpath(op, numbered_dirs[1], "training_day.npy"))[1]
 
         if isfile(joinpath(op, numbered_dirs[1], "no_neural.flag"))
-            neural_missing = 1
+            neural_missing = true
         end
   
         multiple_tries = length(numbered_dirs) > 1 ? true : false
@@ -69,7 +69,7 @@ end
 
 function get_trial_behavior(path)
     beh_names = [
-        "_ibl_trials.goCueTrigger_times.npy",
+        "_ibl_trials.goCue_times.npy",
         "_ibl_trials.firstMovement_times.npy",
         "_ibl_trials.feedback_times.npy",
         "_ibl_trials.feedbackType.npy",
@@ -114,6 +114,7 @@ function event_indices(fluo_time, stim_time, act_time, reward_time)
         get_event_match_idx(fluo_time, reward_time)
     )
 end
+
 
 """
 the main function for loading the behavioral and fluorescence data,
@@ -169,6 +170,46 @@ function mouse_session_data(base_path, mouse_id, day; target_hz=50)
         stim_idx = stim_idx,
         act_idx = act_idx,
         reward_idx = reward_idx,
+        path = path,
+        session_number = path_info.session[session_idx],
+        mult_tries = path_info.multi[session_idx]
+    )
+end
+
+"""
+this function is the equivalant of the above function but for day 0 
+"""
+function mouse_session0_data(base_path, mouse_id; target_hz=50)
+    path_info = get_session_paths(base_path, mouse_id)
+    session_idx = findfirst(path_info.session .== 0)
+    path = path_info.path[session_idx]
+    _, neural_data = get_neural_data(path)
+    behavior_data = get_trial_behavior(path)
+
+    neural_data = DataFrame(
+        NAcc = resample_data(neural_data.times, neural_data.NAcc; rate = 1/target_hz),
+        DMS = resample_data(neural_data.times, neural_data.DMS; rate = 1/target_hz),
+        DLS = resample_data(neural_data.times, neural_data.DLS; rate = 1/target_hz),
+        times = resample_data(neural_data.times, neural_data.times; rate = 1/target_hz)
+    )
+
+    # discard negative time
+    first_pos_idx_neural = findfirst(neural_data.times .> 0)
+    neural_data = neural_data[first_pos_idx_neural:end, :]
+
+    first_beh_trial = findfirst(neural_data.times[1] .< behavior_data.stim_time)
+    behavior_data = behavior_data[first_beh_trial:end, :]
+
+    stim_idx, act_idx, reward_idx = event_indices(neural_data.times, behavior_data.stim_time, behavior_data.act_time, behavior_data.reward_time)
+
+    use_stim_idx = .!isnothing.(stim_idx)
+
+    return (
+        neural = neural_data,
+        behavior = behavior_data[use_stim_idx, :],
+        stim_idx = stim_idx[.!isnothing.(stim_idx)],
+        act_idx = act_idx[.!isnothing.(act_idx)],
+        reward_idx = reward_idx[.!isnothing.(reward_idx)],
         path = path,
         session_number = path_info.session[session_idx],
         mult_tries = path_info.multi[session_idx]
