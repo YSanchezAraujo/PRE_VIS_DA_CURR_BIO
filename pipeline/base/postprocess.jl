@@ -8,8 +8,8 @@ using AnovaBase;
 using AnovaMixedModels;
 
 # load results
-results = load("/jukebox/witten/yoel/saved_results/neural_results.jld2", "results");
-kernel_norm = results.kernel_norm;
+neu_results = load("/jukebox/witten/yoel/saved_results/neural_results.jld2", "results");
+kernel_norm = neu_results.kernel_norm;
 mouse_ids = [collect(13:16); collect(26:43)];
 
 qc_dict = Dict(
@@ -75,21 +75,21 @@ ipsi_dls_corrs = avg_ipsi_correlation_conmod_dls(kernel_norm, behavior_weight, m
 ipsi_nacc_corrs = avg_ipsi_correlation_conmod_nacc(kernel_norm, behavior_weight, mouse_ids)
 
 # load day0 results
-results = load("/jukebox/witten/yoel/saved_results/day0_neural_results.jld2", "results");
+neu_day0_results = load("/jukebox/witten/yoel/saved_results/day0_neural_results.jld2", "results");
 
 day0_mice = 26:43;
 # the averages  of these kernels replicate figure 3.B
-contra_dms_kernel = [results.kernel[f]["DMS"][dms_contra_map[f]] for f in day0_mice];
-ipsi_dms_kernel = [results.kernel[f]["DMS"][dms_ipsi_map[f]] for f in day0_mice]
+contra_dms_kernel = [neu_day0_results.kernel[f]["DMS"][dms_contra_map[f]] for f in day0_mice];
+ipsi_dms_kernel = [neu_day0_results.kernel[f]["DMS"][dms_ipsi_map[f]] for f in day0_mice]
 
-contra_dls_kernel = [results.kernel[f]["DLS"][dms_ipsi_map[f]] for f in day0_mice];
-ipsi_dls_kernel = [results.kernel[f]["DLS"][dms_contra_map[f]] for f in day0_mice];
+contra_dls_kernel = [neu_day0_results.kernel[f]["DLS"][dms_ipsi_map[f]] for f in day0_mice];
+ipsi_dls_kernel = [neu_day0_results.kernel[f]["DLS"][dms_contra_map[f]] for f in day0_mice];
 
-contra_nacc_kernel = [results.kernel[f]["NAcc"][dms_ipsi_map[f]] for f in day0_mice];
-ipsi_nacc_kernel = [results.kernel[f]["NAcc"][dms_contra_map[f]] for f in day0_mice];
+contra_nacc_kernel = [neu_day0_results.kernel[f]["NAcc"][dms_ipsi_map[f]] for f in day0_mice];
+ipsi_nacc_kernel = [neu_day0_results.kernel[f]["NAcc"][dms_contra_map[f]] for f in day0_mice];
 
 # figure 3.D
-day0_contra_dms_norms = hcat([results.kernel_norm[f]["DMS"][dms_contra_map[f]] for f in day0_mice]...)'
+day0_contra_dms_norms = hcat([neu_day0_results.kernel_norm[f]["DMS"][dms_contra_map[f]] for f in day0_mice]...)'
 day0_contra_dms_norms_conmod = day0_contra_dms_norms[:, 4] .- day0_contra_dms_norms[:, 1]
 plt.hist(day0_contra_dms_norms_conmod, edgecolor="white")
 
@@ -161,8 +161,6 @@ strong_contra_dms_df = df_for_stats(beh_avg_strong_dms_contra_day0.mice, day0_co
 weak_contra_dms_df = df_for_stats(beh_avg_weak_dms_contra_day0.mice, day0_contra_dms_norms_conmod[weak_dms], weak_grp_ids)
 contra_df_dms = [strong_contra_dms_df; weak_contra_dms_df]
 contra_df_dms[!, :mc_neural_strength] = contra_df_dms.neural_strength .- mean(contra_df_dms.neural_strength);
-
-
 frm = @formula(contrast_weight ~ day_split3*mc_neural_strength + (1 + day_split3|mouse))
 contrasts = Dict(
     :mouse => DummyCoding(), 
@@ -214,8 +212,6 @@ plt.fill_between(xt, weak_bias_avg .- weak_bias_err, weak_bias_avg .+ weak_bias_
 
 strong_bias_df = df_for_stats(bias_dms_strong_day0, day0_contra_dms_norms_conmod[strong_dms], strong_grp_ids) 
 weak_bias_df = df_for_stats(bias_dms_weak_day0, day0_contra_dms_norms_conmod[weak_dms], weak_grp_ids)
-
-
 bias_df_dms = [strong_bias_df; weak_bias_df]
 bias_df_dms[!, :mc_neural_strength] = bias_df_dms.neural_strength .- mean(bias_df_dms.neural_strength);
 frm = @formula(contrast_weight ~ day_split3*mc_neural_strength + (1 + day_split3|mouse))

@@ -69,7 +69,7 @@ end
 
 function get_trial_behavior(path)
     beh_names = [
-        "_ibl_trials.goCue_times.npy",
+        "_ibl_trials.goCueTrigger_times.npy",
         "_ibl_trials.firstMovement_times.npy",
         "_ibl_trials.feedback_times.npy",
         "_ibl_trials.feedbackType.npy",
@@ -142,9 +142,9 @@ function mouse_session_data(base_path, mouse_id, day; target_hz=50)
     we resample the neural data to a 1/target_hz
     """
     neural_data = DataFrame(
-        NAcc = resample_data(neural_data.times, neural_data.NAcc; rate = 1/target_hz),
-        DMS = resample_data(neural_data.times, neural_data.DMS; rate = 1/target_hz),
-        DLS = resample_data(neural_data.times, neural_data.DLS; rate = 1/target_hz),
+        NAcc = zscore(resample_data(neural_data.times, neural_data.NAcc; rate = 1/target_hz)),
+        DMS = zscore(resample_data(neural_data.times, neural_data.DMS; rate = 1/target_hz)),
+        DLS = zscore(resample_data(neural_data.times, neural_data.DLS; rate = 1/target_hz)),
         times = resample_data(neural_data.times, neural_data.times; rate = 1/target_hz)
     )
     """
@@ -187,9 +187,9 @@ function mouse_session0_data(base_path, mouse_id; target_hz=50)
     behavior_data = get_trial_behavior(path)
 
     neural_data = DataFrame(
-        NAcc = resample_data(neural_data.times, neural_data.NAcc; rate = 1/target_hz),
-        DMS = resample_data(neural_data.times, neural_data.DMS; rate = 1/target_hz),
-        DLS = resample_data(neural_data.times, neural_data.DLS; rate = 1/target_hz),
+        NAcc = zscore(resample_data(neural_data.times, neural_data.NAcc; rate = 1/target_hz)),
+        DMS = zscore(resample_data(neural_data.times, neural_data.DMS; rate = 1/target_hz)),
+        DLS = zscore(resample_data(neural_data.times, neural_data.DLS; rate = 1/target_hz)),
         times = resample_data(neural_data.times, neural_data.times; rate = 1/target_hz)
     )
 

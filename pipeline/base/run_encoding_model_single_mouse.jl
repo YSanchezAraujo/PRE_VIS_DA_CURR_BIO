@@ -71,7 +71,7 @@ function fit_mouse_all_days(mouse_id, param_set, event_names, summary_func; max_
         Y = vcat(trunc_desmat_items.Y...)
 
         for (reg, rlabel) in enumerate(reg_labels) # 3 regions, NAcc, DMS, DLS in that order
-            model_fit = bayes_ridge(X, zscore(Y[:, reg]); tol=1e-4)
+            model_fit = bayes_ridge(X, Y[:, reg]; tol=1e-4)
 
             # extract the weights in the standard basis
             W = desmat_items.basis * reshape(model_fit.w[2:end], (nfunc, n_stim * n_sets)) # first index is the intercept
@@ -86,7 +86,7 @@ function fit_mouse_all_days(mouse_id, param_set, event_names, summary_func; max_
             error_norms = scalar_summary_stats(errors, event_names, summary_func)
 
             # compute rsquared
-            var_expl[rlabel][day] = rsquared(zscore(Y[:, reg]), X * model_fit.w)
+            var_expl[rlabel][day] = rsquared(Y[:, reg], X * model_fit.w)
 
             # store results
             for ev in event_names
@@ -121,8 +121,8 @@ param_set = (
 #mouse_idx = parse(Int, ARGS[1]);
 #mouse = [collect(13:16); collect(26:43)][mouse_idx];
 
-#for mouse in [collect(13:16); collect(26:43)]
-for mouse in collect(33:43)
+for mouse in [collect(13:16); collect(26:43)]
+#for mouse in collect(13:16)
 K, E, Knorm, Enorm, vexpl = fit_mouse_all_days(mouse, param_set, event_names, norm);
 
 save_path = "/jukebox/witten/yoel/saved_results"
@@ -145,4 +145,5 @@ save(
         vexpl = vexpl
     )
 )
+GC.gc()
 end

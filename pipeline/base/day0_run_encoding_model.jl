@@ -61,7 +61,7 @@ function fit_mouse_day0(mouse_id, param_set, event_names, summary_func)
 
     reg_labels = ["NAcc", "DMS", "DLS"]
     for (reg, rlabel) in enumerate(reg_labels)
-        model_fit = bayes_ridge(X, zscore(Y[:, reg]))
+        model_fit = bayes_ridge(X, Y[:, reg])
         # extract the weights in the standard basis
         W = desmat_items.basis * reshape(model_fit.w[2:end], (nfunc, n_stim * n_sets))
         S = desmat_items.basis * reshape(sqrt.(diag(model_fit.covar)[2:end]), (nfunc, n_stim * n_sets))
@@ -74,7 +74,7 @@ function fit_mouse_day0(mouse_id, param_set, event_names, summary_func)
         error_norms = scalar_summary_stats(errors, event_names[1:n_sets], summary_func)
 
         # compute rsquared
-        var_expl[rlabel] = rsquared(zscore(Y[:, reg]), X * model_fit.w)
+        var_expl[rlabel] = rsquared(Y[:, reg], X * model_fit.w)
         
         # store results
         for ev in event_names[1:n_sets]
