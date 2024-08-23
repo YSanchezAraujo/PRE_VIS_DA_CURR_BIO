@@ -7,6 +7,7 @@ using JLD2;
 using StatsBase;
 using DataFrames;
 using RobustModels;
+using GLM;
 
 mutable struct MouseBehavior
     avg::Matrix
@@ -59,7 +60,7 @@ function nanstd(X, dim)
 end
 
 
-nansem(X, dim) = vec(nanstd(X, dim)) ./ sqrt(size(X, dim))
+nansem(X, dim) = drop_dim(nanstd(X, dim)) ./ sqrt(size(X, dim))
 
 function split_inds(arr, n::Int64)
     return Vector.(collect(Iterators.partition(arr, n)))
@@ -249,6 +250,40 @@ function zscore_transform(u)
     dt = fit(StatsBase.ZScoreTransform, u)
     return StatsBase.transform(dt, u)
 end
+
+function binary_nan_lm(x, y; ztransform=true)
+    use_ind = binary_union_not_nan(x, y)
+
+    if ztransform
+        y_use = zscore_transform(y[use_ind])
+        x_use = zscore_transform(x[use_ind])
+    else
+        y_use = y[use_ind]
+        x_use = x[use_ind]
+    end
+
+    model = lm(Float64.(add_intercept(x_use)), Float64.(y_use))
+    pval = coeftable(model).cols[4][2]
+    b0, beta = coef(model)
+
+    r2_val = StatsBase.r2(model, :devianceratio)
+    cor_val = NaN
+
+    try
+        cor_val = sign(beta) * sqrt(r2_val)
+    catch
+        nothing
+    end
+
+    return (
+        p = pval,
+        b0 = b0,
+        beta = beta,
+        r2 = r2_val,
+        cor = cor_val,
+    )
+end
+
 
 function robust_nanlm(x, y; ztransform=true)
     use_ind = binary_union_not_nan(x, y)
