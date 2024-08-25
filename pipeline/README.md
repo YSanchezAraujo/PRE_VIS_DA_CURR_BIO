@@ -29,6 +29,9 @@ if instead you want to install it into an already established enviornment, remov
 # Python
 Note that the command above will install a new conda environment with it's own version of python, so if you didn't have it installed (unlikely) you now do. 
 
+# Running files
+If you are running the julia files in a given directory, open up julia in that directory (or change into it from within julia). So if running for example `run_encoding_model.jl` you should be in the `base` directory when you start up julia. If you are making any of the figures, then `cd` into the `figures` directory before you start up julia
+
 # Reproducing results
 After you have set up your compute enviornment and downloaded the data, you should:
 1. run `run_encoding_model.jl`
