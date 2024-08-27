@@ -39,4 +39,5 @@ After you have set up your compute enviornment and downloaded the data, you shou
 3. run `save_behavioral_data_for_model.jl`
 4. use STAN to run the behavioral model, see `run_behavioral_model_single_mouse.py` and `submit_stan_job.slurm` files
 5. aggreate behavioral and neural results, run `aggregate_beh_results.jl` and `aggregate_encoding_results.jl`
-6. the scripts in the `figures` reproduce figures and results from the paper
+    a. (if you ran the encoding model serially and saved the larger results file then no need to aggregrate it)
+7. the scripts in the `figures` reproduce figures and results from the paper
