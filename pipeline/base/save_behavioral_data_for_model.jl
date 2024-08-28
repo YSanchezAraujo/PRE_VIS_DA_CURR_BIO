@@ -12,11 +12,12 @@ function mouse_behavioral_data_all_days(data_path, mouse_id)
     
     for path in session_paths.path[non_pretrain_session]
         behavior_data = get_trial_behavior(path)
-        contrasts = [behavior_data.contrast_left behavior_data.contrast_right]
+        keep_trials = .!isnan.(behavior_data.act_time)
+        contrasts = [behavior_data.contrast_left[keep_trials] behavior_data.contrast_right[keep_trials]]
         contrasts[isnan.(contrasts)] .= 0.0
         push!(trials_per_day, size(contrasts, 1))
         push!(beh_datasets, add_intercept(contrasts))
-        push!(choices, behavior_data.choice)
+        push!(choices, behavior_data.choice[keep_trials])
     end
 
     return (
@@ -25,7 +26,6 @@ function mouse_behavioral_data_all_days(data_path, mouse_id)
         trials = trials_per_day,
         choice = choices
     )
-
 end
 
 fy(c) = c == 1 ? 1 : 0
