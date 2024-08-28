@@ -39,7 +39,7 @@ day0_mice = 26:43;
 # figure 3.D
 day0_contra_dms_norms = hcat([neu_day0_results.kernel_norm[f]["DMS"][dms_contra_map[f]] for f in day0_mice]...)'
 day0_contra_dms_norms_conmod = day0_contra_dms_norms[:, 4] .- day0_contra_dms_norms[:, 1]
-strong_dms = day0_contra_dms_norms_conmod .> 2
+strong_dms = day0_contra_dms_norms_conmod .> 2.
 weak_dms = .!strong_dms
 strong_color="tab:red"
 weak_color="tab:orange"
@@ -56,6 +56,7 @@ ax.hist(
     )
 ax.set_ylabel("Counts")
 ax.axvline(2, lw=2, linestyle="--", color="black", label="_nolegend_")
+ax.set_xticks([0, 2, 4, 6])
 plt.legend()
 plt.savefig("strong_weak_dms_day0_hist.pdf", transparent=true, bbox_inches="tight")
 
@@ -88,14 +89,24 @@ end
 function weight_by_group(beh_weight, group_ids, side_label, region_label)
     side_map, multiplier = get_side_map_multiplier(side_label, region_label)
 
-    group_weights = hcat([
+    group_avgs = hcat([
         behavior_weight[f].avg[:, side_map[f]] * (multiplier * beh_multiplier_contra[f]) for f in group_ids
         ]...)
 
+    group_ptl = hcat([
+        behavior_weight[f].ci275[:, side_map[f]] * (multiplier * beh_multiplier_contra[f]) for f in group_ids
+        ]...)
+
+    group_ptu = hcat([
+        behavior_weight[f].ci975[:, side_map[f]] * (multiplier * beh_multiplier_contra[f]) for f in group_ids
+        ]...)
+
     return (
-        mice = group_weights,
-        avg = nanmean(group_weights, 2),
-        sem = nansem(group_weights, 2)
+        mice = group_avgs,
+        avg = nanmean(group_avgs, 2),
+        sem = nansem(group_avgs, 2),
+        ci275 = nanmean(group_ptl, 2),
+        ci975 = nanmean(group_ptu, 2)
     )
 
 end

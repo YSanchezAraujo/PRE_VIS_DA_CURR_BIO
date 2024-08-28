@@ -44,7 +44,6 @@ ipsi_nacc_corrs = avg_ipsi_correlation_conmod_nacc(kernel_norm, behavior_weight,
 
 
 # stats within and between groups
-
 # DMS null hypothesis of no difference from zero
 null_zero_dms_contra = OneSampleTTest(contra_dms_corrs.corrs)
 null_zero_dms_ipsi = OneSampleTTest(ipsi_dms_corrs.corrs)
