@@ -141,6 +141,7 @@ for mouse in collect(26:43)
     setindex!(results_Knorm, Knorm, mouse)
     setindex!(results_Enorm, Enorm, mouse)
     setindex!(results_vexpl, vexpl, mouse)
+    GC.gc()
 end
 
 save_path = "/jukebox/witten/yoel/saved_results"

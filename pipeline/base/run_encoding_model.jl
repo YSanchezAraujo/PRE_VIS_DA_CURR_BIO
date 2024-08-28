@@ -1,6 +1,7 @@
 include(joinpath(@__DIR__, "encoding_model.jl"))
 include(joinpath(@__DIR__, "preprocess.jl"))
 include(joinpath(@__DIR__, "design_matrix.jl"))
+include(joinpath(@__DIR__, "constants.jl"))
 
 
 function scalar_summary_stats(weights, event_names, func)
@@ -63,18 +64,19 @@ function fit_mouse_all_days(mouse_id, param_set, event_names, summary_func; max_
         data = mouse_session_data(base_path, mouse_id, day)
         desmat_items = make_design_matrix_items(data, window, nfunc)
         full_desmat = design_matrix(desmat_items)
+        wheel_for_desmat = wheel_desmat_features(data, window);
 
         # this design matrix is truncated to only behavioral events 
-        trunc_desmat_items = truncate_design_matrix(full_desmat, data, window);
+        trunc_desmat_items = truncate_design_matrix([full_desmat wheel_for_desmat], data, window);
         X = vcat(trunc_desmat_items.X...)
         Y = vcat(trunc_desmat_items.Y...)
 
         for (reg, rlabel) in enumerate(reg_labels) # 3 regions, NAcc, DMS, DLS in that order
-            model_fit = bayes_ridge(X, zscore(Y[:, reg]))
+            model_fit = bayes_ridge(X, Y[:, reg])
 
             # extract the weights in the standard basis
-            W = desmat_items.basis * reshape(model_fit.w[2:end], (nfunc, n_stim * n_sets)) # first index is the intercept
-            S = desmat_items.basis * reshape(sqrt.(diag(model_fit.covar)[2:end]), (nfunc, n_stim * n_sets))
+            W = desmat_items.basis * reshape(model_fit.w[2:end-6], (nfunc, n_stim * n_sets)) # first index is the intercept
+            S = desmat_items.basis * reshape(sqrt.(diag(model_fit.covar)[2:end-6]), (nfunc, n_stim * n_sets))
 
             # put the estimated model estimates in a less error prone data structure
             kernels = weights_by_event(W, n_stim, event_names)
@@ -85,7 +87,7 @@ function fit_mouse_all_days(mouse_id, param_set, event_names, summary_func; max_
             error_norms = scalar_summary_stats(errors, event_names, summary_func)
 
             # compute rsquared
-            var_expl[rlabel][day] = rsquared(zscore(Y[:, reg]), X * model_fit.w)
+            var_expl[rlabel][day] = rsquared(Y[:, reg], X * model_fit.w)
 
             # store results
             for ev in event_names
@@ -117,13 +119,6 @@ param_set = (
     base_path = "/jukebox/witten/ONE/alyx.internationalbrainlab.org/wittenlab/Subjects" # whereever you have downloaded the data
 );
 
-event_names = [
-    "stim_right", "stim_left", 
-    "act_right_correct", "act_right_incorrect",
-    "act_left_correct", "act_left_incorrect", 
-    "reward_right_correct", "reward_right_incorrect", 
-    "reward_left_correct", "reward_left_incorrect"
-];
 
 mouse_ids = [collect(13:16); collect(26:43)];
 results_K = Dict();
@@ -139,6 +134,8 @@ for mouse in mouse_ids
     setindex!(results_Knorm, Knorm, mouse)
     setindex!(results_Enorm, Enorm, mouse)
     setindex!(results_vexpl, vexpl, mouse)
+    println("Finished fitting mouse $mouse")
+    GC.gc()
 end
 
 save_path = "/jukebox/witten/yoel/saved_results"

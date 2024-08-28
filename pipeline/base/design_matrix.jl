@@ -1,5 +1,29 @@
 include("utility.jl");
 
+function seperate_wheel_feature(data, contrast_per_trial, window, wheel_feat)
+    n_samp = size(data.neural, 1)
+    wn = size(wheel_feat, 1)
+    z = fill(NaN, n_samp)
+    trials = .!isnan.(contrast_per_trial) .& (data.behavior.reward_type .== 1)
+    for (i, j) in zip(data.stim_idx[trials], data.reward_idx[trials])
+        k = minimum([j + window - 1, n_samp, wn])
+        z[i:k] = wheel_feat[i:k]
+    end
+    return z
+end
+
+function wheel_desmat_features(data, window)
+    vel_left = seperate_wheel_feature(data, data.behavior.contrast_left, window, data.wheel.vel)
+    vel_right = seperate_wheel_feature(data, data.behavior.contrast_right, window, data.wheel.vel)
+    pos_left = seperate_wheel_feature(data, data.behavior.contrast_left, window, data.wheel.pos)
+    pos_right = seperate_wheel_feature(data, data.behavior.contrast_right, window, data.wheel.pos)
+    acel_left = seperate_wheel_feature(data, data.behavior.contrast_left, window, data.wheel.acel)
+    acel_right = seperate_wheel_feature(data, data.behavior.contrast_right, window, data.wheel.acel)
+    W = [pos_right pos_left vel_right vel_left acel_right acel_left]
+    W[isnan.(W)] .= 0
+    return sparse(W)
+end
+
 function make_cosine_basis_linear(nB, peak_range, dt, time_range)
     raisedCosfn(x, c, dc) = (cos(max(-pi,min(pi,(x-c)*pi/dc/2)))+1)/2
     dCtr = (diff(peak_range) / (nB - 1))[1]

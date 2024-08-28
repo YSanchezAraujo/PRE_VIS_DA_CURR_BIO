@@ -13,7 +13,7 @@ function contra_weights_dms_conmod(kernel_norm, behavior, mouseid)
 end
 
 function contra_correlation_conmod_dms(kernel_norm, behavior, mouseid)
-    return robust_nanlm(contra_weights_dms_conmod(kernel_norm, behavior, mouseid)...).cor
+    return nancor(contra_weights_dms_conmod(kernel_norm, behavior, mouseid)...)
 end
 
 function avg_contra_correlation_conmod_dms(kernel_norm, behavior, mouse_ids)
@@ -33,13 +33,13 @@ function ipsi_weights_dms_conmod(kernel_norm, behavior, mouseid)
         kernel_norm[mouseid]["DMS"][dms_ipsi_map[mouseid]][:, 1]
     )
 
-    beh = behavior[mouseid].avg[:, beh_dms_ipsi_map[mouseid]] * (-1 * beh_multiplier_contra[mouseid])
+    beh = behavior[mouseid].avg[:, beh_dms_ipsi_map[mouseid]] *  beh_multiplier_ipsi[mouseid]
 
     return neu, beh
 end
 
 function ipsi_correlation_conmod_dms(kernel_norm, behavior, mouseid)
-    return robust_nanlm(ipsi_weights_dms_conmod(kernel_norm, behavior, mouseid)...).cor
+    return nancor(ipsi_weights_dms_conmod(kernel_norm, behavior, mouseid)...)
 end
 
 function avg_ipsi_correlation_conmod_dms(kernel_norm, behavior, mouse_ids)
@@ -59,13 +59,13 @@ function contra_weights_dls_conmod(kernel_norm, behavior, mouseid)
         kernel_norm[mouseid]["DLS"][dms_ipsi_map[mouseid]][:, 1]
     )
 
-    beh = behavior[mouseid].avg[:, beh_dms_ipsi_map[mouseid]] * (-1 * beh_multiplier_contra[mouseid])
+    beh = behavior[mouseid].avg[:, beh_dms_ipsi_map[mouseid]] * beh_multiplier_ipsi[mouseid]
 
     return neu, beh
 end
 
 function contra_correlation_conmod_dls(kernel_norm, behavior, mouseid)
-    return robust_nanlm(contra_weights_dls_conmod(kernel_norm, behavior, mouseid)...).cor
+    return nancor(contra_weights_dls_conmod(kernel_norm, behavior, mouseid)...)
 end
 
 function avg_contra_correlation_conmod_dls(kernel_norm, behavior, mouse_ids)
@@ -91,7 +91,7 @@ function ipsi_weights_dls_conmod(kernel_norm, behavior, mouseid)
 end
 
 function ipsi_correlation_conmod_dls(kernel_norm, behavior, mouseid)
-    return robust_nanlm(ipsi_weights_dls_conmod(kernel_norm, behavior, mouseid)...).cor
+    return nancor(ipsi_weights_dls_conmod(kernel_norm, behavior, mouseid)...)
 end
 
 function avg_ipsi_correlation_conmod_dls(kernel_norm, behavior, mouse_ids)
@@ -113,13 +113,13 @@ function contra_weights_nacc_conmod(kernel_norm, behavior, mouseid)
         kernel_norm[mouseid]["NAcc"][dms_ipsi_map[mouseid]][:, 1]
     )
 
-    beh = behavior[mouseid].avg[:, beh_dms_ipsi_map[mouseid]] * (-1 * beh_multiplier_contra[mouseid])
+    beh = behavior[mouseid].avg[:, beh_dms_ipsi_map[mouseid]] * beh_multiplier_ipsi[mouseid]
 
     return neu, beh
 end
 
 function contra_correlation_conmod_nacc(kernel_norm, behavior, mouseid)
-    return robust_nanlm(contra_weights_nacc_conmod(kernel_norm, behavior, mouseid)...).cor
+    return nancor(contra_weights_nacc_conmod(kernel_norm, behavior, mouseid)...)
 end
 
 function avg_contra_correlation_conmod_nacc(kernel_norm, behavior, mouse_ids)
@@ -145,7 +145,7 @@ function ipsi_weights_nacc_conmod(kernel_norm, behavior, mouseid)
 end
 
 function ipsi_correlation_conmod_nacc(kernel_norm, behavior, mouseid)
-    return robust_nanlm(ipsi_weights_nacc_conmod(kernel_norm, behavior, mouseid)...).cor
+    return nancor(ipsi_weights_nacc_conmod(kernel_norm, behavior, mouseid)...)
 end
 
 function avg_ipsi_correlation_conmod_nacc(kernel_norm, behavior, mouse_ids)

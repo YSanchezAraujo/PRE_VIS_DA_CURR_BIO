@@ -30,6 +30,7 @@ const beh_dms_contra_map = Dict(
     f => g_beh_contra_ipsi(dms_contra_map[f]) for f in [collect(13:16); collect(26:43)]
 )
 
+
 const dms_ipsi_map = Dict(
     13 => "stim_right",
     14 => "stim_right",
@@ -62,6 +63,10 @@ const beh_dms_ipsi_map = Dict(
 g_beh_mult(x) = x == 3 ? -1 : 1
 const beh_multiplier_contra = Dict(
     f => g_beh_mult(beh_dms_contra_map[f]) for f in [collect(13:16); collect(26:43)]
+)
+
+const beh_multiplier_ipsi = Dict(
+    f => g_beh_mult(beh_dms_ipsi_map[f]) for f in [collect(13:16); collect(26:43)]
 )
 
 const event_names = [

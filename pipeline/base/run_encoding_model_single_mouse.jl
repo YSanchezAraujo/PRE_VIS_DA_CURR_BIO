@@ -2,7 +2,7 @@ include(joinpath(@__DIR__, "encoding_model.jl"))
 include(joinpath(@__DIR__, "preprocess.jl"))
 include(joinpath(@__DIR__, "design_matrix.jl"))
 include(joinpath(@__DIR__, "constants.jl"))
-
+using JLD2;
 
 function scalar_summary_stats(weights, event_names, func)
     summary = Dict()
@@ -64,9 +64,10 @@ function fit_mouse_all_days(mouse_id, param_set, event_names, summary_func; max_
         data = mouse_session_data(base_path, mouse_id, day)
         desmat_items = make_design_matrix_items(data, window, nfunc)
         full_desmat = design_matrix(desmat_items)
+        wheel_for_desmat = wheel_desmat_features(data, window);
 
         # this design matrix is truncated to only behavioral events 
-        trunc_desmat_items = truncate_design_matrix(full_desmat, data, window);
+        trunc_desmat_items = truncate_design_matrix([full_desmat wheel_for_desmat], data, window);
         X = vcat(trunc_desmat_items.X...)
         Y = vcat(trunc_desmat_items.Y...)
 
@@ -74,8 +75,8 @@ function fit_mouse_all_days(mouse_id, param_set, event_names, summary_func; max_
             model_fit = bayes_ridge(X, Y[:, reg]; tol=1e-4)
 
             # extract the weights in the standard basis
-            W = desmat_items.basis * reshape(model_fit.w[2:end], (nfunc, n_stim * n_sets)) # first index is the intercept
-            S = desmat_items.basis * reshape(sqrt.(diag(model_fit.covar)[2:end]), (nfunc, n_stim * n_sets))
+            W = desmat_items.basis * reshape(model_fit.w[2:end-6], (nfunc, n_stim * n_sets)) # first index is the intercept
+            S = desmat_items.basis * reshape(sqrt.(diag(model_fit.covar)[2:end-6]), (nfunc, n_stim * n_sets))
 
             # put the estimated model estimates in a less error prone data structure
             kernels = weights_by_event(W, n_stim, event_names)
@@ -121,7 +122,7 @@ param_set = (
 mouse_idx = parse(Int, ARGS[1]);
 mouse = [collect(13:16); collect(26:43)][mouse_idx];
 
-
+for mouse in [collect(13:16); collect(26:43)]
 K, E, Knorm, Enorm, vexpl = fit_mouse_all_days(mouse, param_set, event_names, norm);
 
 save_path = "/jukebox/witten/yoel/saved_results"
@@ -132,7 +133,6 @@ else
     println("Directory already exists at: $save_path")
 end
 
-using JLD2;
 save(
     joinpath(save_path, "neural_results_mouseid_$(mouse).jld2"),
     "results",
@@ -144,3 +144,5 @@ save(
         vexpl = vexpl
     )
 )
+GC.gc()
+end

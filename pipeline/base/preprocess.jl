@@ -4,6 +4,7 @@ using NPZ;
 using DataFrames;
 using StatsBase;
 using JSON;
+using Interpolations;
 
 function get_session_paths(base_path, fip; stable_sub_path_str = "alf")
     path_info = []
@@ -91,6 +92,7 @@ function get_trial_behavior(path)
     )
 end
 
+
 function find_broken_trials(fluo_time, trial_time)
     return isnothing.([findfirst(fluo_time .>= trial_time[k]) for k in 1:length(trial_time)])
 end
@@ -115,6 +117,43 @@ function event_indices(fluo_time, stim_time, act_time, reward_time)
     )
 end
 
+function get_wheel_data(path)
+    wheel_pos = npzread(joinpath(path, "_ibl_wheel.position.npy"))
+    wheel_pos = mod.(wheel_pos, 6.283185307179586)
+    wheel_pos = wheel_pos .- wheel_pos[1]
+    wheel_times = npzread(joinpath(path, "_ibl_wheel.timestamps.npy"))
+    return [wheel_times wheel_pos]
+end
+
+
+scipy_signal = pyimport("scipy.signal")
+function vel_gauss_conv(pos, rate; smooth_size=0.03)
+    std_samps = Int64(round(smooth_size * (1 / rate)))
+    N = std_samps * 6
+    gauss_std = (N - 1) / 6
+    win = scipy_signal.gaussian(N, gauss_std)
+    win = win ./ sum(win)
+    vel = [0; scipy_signal.convolve(diff(pos), win, mode="same")] .* (1 / rate)
+    acc = [0; scipy_signal.convolve(diff(vel), win, mode="same")] .* (1 / rate)
+    return vel, acc
+end
+
+function resample_wheel_data(neural_times, wheel_time, wheel_position; pad=0.0)
+    start_time = minimum(neural_times) - pad
+    end_time = maximum(neural_times) + pad    
+    dtn = mean(diff(neural_times))
+    new_time_points = range(start_time, length=length(neural_times), step=dtn)    
+    interp_time = LinearInterpolation(wheel_time, wheel_time, extrapolation_bc = Line())
+    interp_position = LinearInterpolation(wheel_time, wheel_position, extrapolation_bc = Line())
+    resampled_wheel_time = interp_time(new_time_points)
+    resampled_wheel_position = interp_position(new_time_points)
+    start_time = minimum(neural_times) - pad
+    end_time = maximum(neural_times) + pad
+    truncated_indices = (new_time_points .>= start_time) .& (new_time_points .<= end_time)
+    truncated_wheel_time = resampled_wheel_time[truncated_indices]
+    truncated_wheel_position = resampled_wheel_position[truncated_indices]
+    return truncated_wheel_time, truncated_wheel_position
+end
 
 """
 the main function for loading the behavioral and fluorescence data,
@@ -163,10 +202,18 @@ function mouse_session_data(base_path, mouse_id, day; target_hz=50)
     get the indices w.r.t to the fluo data for each event across all trials
     """
     stim_idx, act_idx, reward_idx = event_indices(neural_data.times, behavior_data.stim_time, behavior_data.act_time, behavior_data.reward_time)
-    
+    """
+    loading in the wheel data and resampling it
+    """;
+    wheel_data = get_wheel_data(path)
+    wheel_time, wheel_pos = resample_wheel_data(neural_data.times, wheel_data[:, 1], wheel_data[:, 2])
+    wheel_vel, wheel_acel = vel_gauss_conv(wheel_pos, 1 / target_hz)
+    wheel_data = DataFrame([wheel_time zscore(wheel_pos) zscore(wheel_vel) zscore(wheel_acel)], [:times, :pos, :vel, :acel])
+
     return (
         neural = neural_data,
         behavior = behavior_data,
+        wheel = wheel_data,
         stim_idx = stim_idx,
         act_idx = act_idx,
         reward_idx = reward_idx,

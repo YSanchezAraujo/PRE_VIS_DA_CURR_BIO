@@ -69,11 +69,11 @@ parameters {
 
     real lam_coh_alpha;
 
-    real<lower=0.1>eta;
+    real<lower=0>eta;
 
     vector[P+1] mu_init;
 
-    real<lower=1>nu;
+    real<lower=0>nu;
 }
 
 transformed parameters {
