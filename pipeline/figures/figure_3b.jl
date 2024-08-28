@@ -62,7 +62,7 @@ for i in 1:4
 end
 ax.set_xticks([])
 ax.set_yticks([0, 0.5, 1])
-plt.savefig("figure_3b_contra_nacc.pdf", format="pdf", transparent=true)
+plt.savefig("figure_3b_contra_nacc.pdf", bbox_inches="tight", transparent=true)
 
 plt.close()
 fig, ax = plt.subplots()
@@ -75,7 +75,7 @@ for i in 1:4
 end
 ax.set_xticks([])
 ax.set_yticks([0, 0.5, 1])
-plt.savefig("figure_3b_ipsi_nacc.pdf", format="pdf", transparent=true)
+plt.savefig("figure_3b_ipsi_nacc.pdf", bbox_inches="tight", transparent=true)
 
 plt.close()
 fig, ax = plt.subplots()
@@ -88,7 +88,7 @@ for i in 1:4
 end
 ax.set_xticks([0, 1])
 ax.set_yticks([0, 0.5, 1])
-plt.savefig("figure_3b_contra_dls.pdf", format="pdf", transparent=true)
+plt.savefig("figure_3b_contra_dls.pdf", bbox_inches="tight", transparent=true)
 
 plt.close()
 fig, ax = plt.subplots()
@@ -101,7 +101,7 @@ for i in 1:4
 end
 ax.set_xticks([0, 1])
 ax.set_yticks([0, 0.5, 1])
-plt.savefig("figure_3b_ipsi_dls.pdf", format="pdf", transparent=true)
+plt.savefig("figure_3b_ipsi_dls.pdf", bbox_inches="tight", transparent=true)
 
 plt.close()
 fig, ax = plt.subplots()
@@ -114,7 +114,7 @@ for i in 1:4
 end
 ax.set_xticks([0, 1])
 ax.set_yticks([0, 0.5, 1])
-plt.savefig("figure_3b_contra_dms.pdf", format="pdf", transparent=true)
+plt.savefig("figure_3b_contra_dms.pdf", bbox_inches="tight", transparent=true)
 
 plt.close()
 fig, ax = plt.subplots()
@@ -127,5 +127,5 @@ for i in 1:4
 end
 ax.set_xticks([0, 1])
 ax.set_yticks([0, 0.5, 1])
-plt.savefig("figure_3b_ipsi_dms.pdf", format="pdf", transparent=true)
+plt.savefig("figure_3b_ipsi_dms.pdf", bbox_inches="tight", transparent=true)
 

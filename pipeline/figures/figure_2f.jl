@@ -4,6 +4,8 @@ include(joinpath(@__DIR__, "../base/correlation_functions.jl"));
 include(joinpath(@__DIR__, "../base/utility.jl"));
 include(joinpath(@__DIR__, "../base/figboilerplate.jl"));
 
+using HypothesisTests;
+
 neu_results = load("/jukebox/witten/yoel/saved_results/neural_results.jld2", "results");
 behavior_weight = load("/jukebox/witten/yoel/saved_results/choice_weights.jld2", "results");
 kernel_norm = neu_results.kernel_norm;
@@ -40,6 +42,40 @@ ipsi_dms_corrs = avg_ipsi_correlation_conmod_dms(kernel_norm, behavior_weight, m
 ipsi_dls_corrs = avg_ipsi_correlation_conmod_dls(kernel_norm, behavior_weight, mouse_ids)
 ipsi_nacc_corrs = avg_ipsi_correlation_conmod_nacc(kernel_norm, behavior_weight, mouse_ids)
 
+
+# stats within and between groups
+
+# DMS null hypothesis of no difference from zero
+null_zero_dms_contra = OneSampleTTest(contra_dms_corrs.corrs)
+null_zero_dms_ipsi = OneSampleTTest(ipsi_dms_corrs.corrs)
+
+# DLS null hypothesis of no difference from zero
+null_zero_dls_contra = OneSampleTTest(contra_dls_corrs.corrs)
+null_zero_dls_ipsi = OneSampleTTest(ipsi_dls_corrs.corrs)
+
+# NAcc null hypothesis of no difference from zero
+null_zero_nacc_contra = OneSampleTTest(contra_nacc_corrs.corrs)
+null_zero_nacc_ipsi = OneSampleTTest(ipsi_nacc_corrs.corrs)
+
+
+diff_dms = OneSampleTTest(contra_dms_corrs.corrs .- ipsi_dms_corrs.corrs)
+diff_dls = OneSampleTTest(contra_dls_corrs.corrs .- ipsi_dls_corrs.corrs)
+diff_nacc = OneSampleTTest(contra_nacc_corrs.corrs .- ipsi_nacc_corrs.corrs)
+
+
+# DMS v.s. DLS null hypothesis of no difference of differences between regions
+diff_of_diff_dms_dls = OneSampleTTest(
+    (contra_dms_corrs.corrs .- ipsi_dms_corrs.corrs) .- (contra_dls_corrs.corrs .- ipsi_dls_corrs.corrs)
+)
+
+# DMS v.s. NAcc null hypothesis of no difference of differences between regions
+diff_of_diff_dms_nacc = OneSampleTTest(
+    (contra_dms_corrs.corrs .- ipsi_dms_corrs.corrs) .- (contra_nacc_corrs.corrs .- ipsi_nacc_corrs.corrs)
+)
+
+
+pd = pyimport("pandas");
+
 cor_by_mouse = Dict(
     "dms" => Dict(
         "contra" => contra_dms_corrs.corrs,
@@ -60,7 +96,7 @@ cor_by_mouse = Dict(
 dms_cor_df = pd.DataFrame(
     hcat([
         vcat([[cor_by_mouse["dms"]["contra"]; cor_by_mouse["dms"]["ipsi"]]]...),
-        [["contra \n v.s. contra" for i in 1:n_mice]; ["ipsi \n v.s. ipsi" for i in 1:n_mice]],
+        [["Contra \n v.s. Contra" for i in 1:n_mice]; ["Ipsi \n v.s. Ipsi" for i in 1:n_mice]],
         [mouse_ids; mouse_ids]
         ]...),
 
@@ -91,16 +127,15 @@ plt.legend([], frameon=false)
 ax.axhline(0, linestyle="--", lw=2, color="black")
 ax.set_yticks([])
 plt.xlabel("DMS")
-#plt.ylabel("correlation")
 plt.ylabel("")
-plt.savefig("PAPER_FINAL_DMS_daybyday_cor_STIM_100-6.pdf", transparent=true, bbox_inches="tight")
-
+plt.savefig("figure_2f_DMS_daybyday_cor_STIM_100-6.pdf", transparent=true, bbox_inches="tight")
+plt.close()
 
 # DLS subplot
 dls_cor_df = pd.DataFrame(
     hcat([
         vcat([[cor_by_mouse["dls"]["contra"]; cor_by_mouse["dls"]["ipsi"]]]...),
-        [["contra \n v.s. contra" for i in 1:n_mice]; ["ipsi \n v.s. ipsi" for i in 1:n_mice]],
+        [["Contra \n v.s. Contra" for i in 1:n_mice]; ["Ipsi \n v.s. Ipsi" for i in 1:n_mice]],
         [mouse_ids; mouse_ids]
         ]...),
 
@@ -131,15 +166,14 @@ plt.legend([], frameon=false)
 ax.axhline(0, linestyle="--", lw=2, color="black")
 ax.set_yticks([])
 plt.xlabel("DLS")
-#plt.ylabel("correlation")
 plt.ylabel("")
-plt.savefig("PAPER_FINAL_DLS_daybyday_cor_STIM_100-6.pdf", transparent=true, bbox_inches="tight")
-
+plt.savefig("figure_2f_DLS_daybyday_cor_STIM_100-6.pdf", transparent=true, bbox_inches="tight")
+plt.close()
 # NAcc subplot
 nacc_cor_df = pd.DataFrame(
     hcat([
         vcat([[cor_by_mouse["nacc"]["contra"]; cor_by_mouse["nacc"]["ipsi"]]]...),
-        [["contra \n v.s. contra" for i in 1:n_mice]; ["ipsi \n v.s. ipsi" for i in 1:n_mice]],
+        [["Contra \n v.s. Contra" for i in 1:n_mice]; ["Ipsi \n v.s. Ipsi" for i in 1:n_mice]],
         [mouse_ids; mouse_ids]
         ]...),
 
@@ -147,7 +181,7 @@ nacc_cor_df = pd.DataFrame(
 )
 
 plt.figure(figsize=(3, 5))
-ax=sns.swarmplot(data=dms_cor_df, x="NAcc", y="correlation", color="tab:blue", s=8,linewidth=1, zorder=1)
+ax=sns.swarmplot(data=nacc_cor_df, x="NAcc", y="correlation", color="tab:blue", s=8,linewidth=1, zorder=1)
 
 sns.boxplot(
             x="NAcc",
@@ -168,8 +202,7 @@ ax.set_xticklabels(ax.get_xticklabels(),rotation=90)
 plt.ylim(-1, 1.1)
 plt.legend([], frameon=false)
 ax.axhline(0, linestyle="--", lw=2, color="black")
-ax.set_yticks([])
 plt.xlabel("NAcc")
-#plt.ylabel("correlation")
 plt.ylabel("")
-plt.savefig("PAPER_FINAL_NAcc_daybyday_cor_STIM_100-6.pdf", transparent=true, bbox_inches="tight")
+plt.savefig("figure_2f_NAcc_daybyday_cor_STIM_100-6.pdf", transparent=true, bbox_inches="tight")
+plt.close()

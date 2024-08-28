@@ -57,7 +57,7 @@ ax.hist(
 ax.set_ylabel("Counts")
 ax.axvline(2, lw=2, linestyle="--", color="black", label="_nolegend_")
 plt.legend()
-plt.savefig("strong_weak_dms_day0_hist.pdf", format="pdf", transparent=true)
+plt.savefig("strong_weak_dms_day0_hist.pdf", transparent=true, bbox_inches="tight")
 
 function get_side_map_multiplier(side_label, region_label)
     if side_label == "contra" && region_label == "DMS"
@@ -122,7 +122,7 @@ ax.fill_between(xt, beh_avg_weak_dms_contra_day0.avg .- beh_avg_weak_dms_contra_
 ax.set_xticks([1, 10, 20])
 ax.set_yticks([0, 4, 8])
 ax.set_xlabel("Session")
-plt.savefig("strong_weak_choice_weights_contra_dms.pdf", format="pdf", transparent=true)
+plt.savefig("strong_weak_choice_weights_contra_dms.pdf", bbox_inches="tight", transparent=true)
 plt.close()
 
 # check stats 
@@ -156,7 +156,7 @@ ax.fill_between(xt, beh_avg_weak_dms_ipsi_day0.avg .- beh_avg_weak_dms_ipsi_day0
 ax.set_xticks([1, 10, 20])
 ax.set_yticks([0, 4, 8])
 ax.set_xlabel("Session")
-plt.savefig("strong_weak_choice_weights_ipsi_dms.pdf", format="pdf", transparent=true)
+plt.savefig("strong_weak_choice_weights_ipsi_dms.pdf", bbox_inches="tight", transparent=true)
 plt.close()
 
 # need to make the dataframes and do the stats like i do for all the other figure 3.X
@@ -193,7 +193,7 @@ ax.fill_between(xt, weak_bias_avg .- weak_bias_err,
 
 ax.set_xticks([1, 10, 20])
 ax.set_xlabel("Session")
-plt.savefig("strong_weak_choice_weights_bias_dms.pdf", format="pdf", transparent=true)
+plt.savefig("strong_weak_choice_weights_bias_dms.pdf", bbox_inches="tight", transparent=true)
 plt.close()
 
 strong_bias_df = df_for_stats(bias_dms_strong_day0, day0_contra_dms_norms_conmod[strong_dms], strong_grp_ids) 
@@ -230,7 +230,7 @@ ax.fill_between(xt, avg_chist_dms_weak_day0 .- err_chist_dms_weak_day0,
 
 ax.set_xticks([1, 10, 20])
 ax.set_xlabel("Session")
-plt.savefig("strong_weak_choice_weights_chist_dms.pdf", format="pdf", transparent=true)
+plt.savefig("strong_weak_choice_weights_chist_dms.pdf", bbox_inches="tight", transparent=true)
 plt.close()
 
 strong_chist_df = df_for_stats(chist_dms_strong_day0, day0_contra_dms_norms_conmod[strong_dms], strong_grp_ids)
