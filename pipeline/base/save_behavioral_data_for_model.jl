@@ -40,7 +40,6 @@ else
     println("directory already exists at: $save_path")
 end
 
-# NOTE: HAVE TO FIX SOMETHING HERE WITH ALIGNING THE DAYS
 for mouse_id in [collect(13:16); collect(26:43)]
     beh_data = mouse_behavioral_data_all_days(data_path, mouse_id)
     X = vcat(beh_data.data...)
