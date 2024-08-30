@@ -74,12 +74,14 @@ avg_ipsi_trials = nanmean(ipsi_trials, 1)
 
 global_min = minimum([minimum(avg_contra_trials), minimum(avg_ipsi_trials)])
 global_max = maximum([maximum(avg_contra_trials), maximum(avg_ipsi_trials)])
+mc = pyimport("matplotlib.colors")
+color_norm = mc.TwoSlopeNorm(vmin=global_min, vmax=global_max, vcenter=0)
 
 fig, ax = plt.subplots()
-cax = ax.imshow(avg_contra_trials[:, :, 2]', aspect="auto", cmap="RdYlBu_r", vmin=global_min, vmax=global_max)
+cax = ax.imshow(avg_contra_trials[:, :, 2]', aspect="auto", cmap="RdYlBu_r", norm=color_norm)
 cbar = fig.colorbar(cax, ax=ax)
 ax.set_yticks([0, 4, 9, 14, 19, 24])
-ax.set_yticklabels([0, 4, 9, 14, 19, 24].+1)
+ax.set_yticklabels([0, 4, 9, 14, 19, 24] .+ 1)
 xt = collect(0:49) ./ 49
 ax.set_xticks([0, 25, 49])
 ax.set_xticklabels([0, round(xt[25]; digits=1), 1])
@@ -89,12 +91,14 @@ plt.savefig("figure_3c_day0_contra_dms.pdf", bbox_inches="tight", transparent=tr
 
 
 fig, ax = plt.subplots()
-cax = ax.imshow(avg_ipsi_trials[:, :, 2]', aspect="auto", cmap="RdYlBu_r", vmin=global_min, vmax=global_max)
+cax = ax.imshow(avg_ipsi_trials[:, :, 2]', aspect="auto", cmap="RdYlBu_r", norm=color_norm)
 cbar = fig.colorbar(cax, ax=ax)
 ax.set_yticks([0, 4, 9, 14, 19, 24])
-ax.set_yticklabels([0, 4, 9, 14, 19, 24].+1)
+ax.set_yticklabels([0, 4, 9, 14, 19, 24] .+ 1)
 xt = collect(0:49) ./ 49
 ax.set_xticks([0, 25, 49])
 ax.set_xticklabels([0, round(xt[25]; digits=1), 1])
 ax.set_title("Ipsilateral")
-plt.savefig("figure_3c_day0_ipsi_dms.pdf", bbox_inches="tight")
+cbar.ax.yaxis.set_ticks([1.5, 0.0, -0.5])
+
+plt.savefig("figure_3c_day0_ipsi_dms.pdf", bbox_inches="tight", transparent=true)

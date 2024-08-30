@@ -39,23 +39,26 @@ day0_mice = 26:43;
 # figure 3.D
 day0_contra_dms_norms = hcat([neu_day0_results.kernel_norm[f]["DMS"][dms_contra_map[f]] for f in day0_mice]...)'
 day0_contra_dms_norms_conmod = day0_contra_dms_norms[:, 4] .- day0_contra_dms_norms[:, 1]
-strong_dms = day0_contra_dms_norms_conmod .> 2.
+strong_dms = day0_contra_dms_norms_conmod .> median(day0_contra_dms_norms_conmod)
 weak_dms = .!strong_dms
 strong_color="tab:red"
 weak_color="tab:orange"
-bins = range(minimum(day0_contra_dms_norms_conmod), stop=maximum(day0_contra_dms_norms_conmod), length=11)
+#bins = range(minimum(day0_contra_dms_norms_conmod), stop=maximum(day0_contra_dms_norms_conmod), length=13)
+bin_width = 0.7  # Example bin width; adjust as necessary
+bins_strong = collect(median(day0_contra_dms_norms_conmod):bin_width:maximum(day0_contra_dms_norms_conmod) + bin_width)
+bins_weak = collect(minimum(day0_contra_dms_norms_conmod):bin_width:median(day0_contra_dms_norms_conmod) + bin_width)
 
 fig, ax = plt.subplots()
 ax.hist(
     day0_contra_dms_norms_conmod[strong_dms], 
-    bins=bins, color=strong_color, edgecolor="white", alpha=1, label="Strong"
+    bins=bins_strong, color=strong_color, edgecolor="white", alpha=1, label="Strong", 
     )
 ax.hist(
     day0_contra_dms_norms_conmod[weak_dms],
-     bins=bins, color=weak_color, edgecolor="white", alpha=1, label="Weak"
+     bins=bins_weak, color=weak_color, edgecolor="white", alpha=1, label="Weak",
     )
 ax.set_ylabel("Counts")
-ax.axvline(2, lw=2, linestyle="--", color="black", label="_nolegend_")
+ax.axvline(median(day0_contra_dms_norms_conmod), lw=2, linestyle="--", color="black", label="_nolegend_")
 ax.set_xticks([0, 2, 4, 6])
 plt.legend()
 plt.savefig("strong_weak_dms_day0_hist.pdf", transparent=true, bbox_inches="tight")
