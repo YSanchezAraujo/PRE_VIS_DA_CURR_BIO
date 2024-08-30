@@ -1,226 +1,0 @@
-usage: conda [-h] [--no-plugins] [-V] COMMAND ...
-conda: error: argument COMMAND: invalid choice: 'activate' (choose from 'clean', 'compare', 'config', 'create', 'info', 'init', 'install', 'list', 'notices', 'package', 'remove', 'uninstall', 'rename', 'run', 'search', 'update', 'upgrade', 'build', 'convert', 'debug', 'develop', 'doctor', 'index', 'inspect', 'metapackage', 'render', 'skeleton', 'content-trust', 'repo', 'pack', 'server', 'env', 'token', 'verify')
-15:03:52 - cmdstanpy - INFO - CmdStan start processing
-chain 1 |[33m          [0m| 00:00 Status
-chain 2 |[33m          [0m| 00:00 Status[A
-
-chain 3 |[33m          [0m| 00:00 Status[A[A
-
-
-chain 4 |[33m          [0m| 00:00 Status[A[A[A
-
-chain 3 |[33m▎         [0m| 00:00 Status[A[A
-chain 2 |[33m▎         [0m| 00:00 Status[A
-
-
-chain 4 |[33m▎         [0m| 00:00 Status[A[A[Achain 1 |[33m▎         [0m| 00:00 Statuschain 1 |[33m▋         [0m| 01:41 Iteration:    1 / 3000 [  0%]  (Warmup)
-
-chain 3 |[33m▋         [0m| 01:42 Iteration:    1 / 3000 [  0%]  (Warmup)[A[A
-chain 2 |[33m▋         [0m| 01:59 Iteration:    1 / 3000 [  0%]  (Warmup)[A
-
-
-chain 4 |[33m▋         [0m| 02:05 Iteration:    1 / 3000 [  0%]  (Warmup)[A[A[A
-
-chain 3 |[33m▉         [0m| 02:25 Iteration:  100 / 3000 [  3%]  (Warmup)[A[Achain 1 |[33m▉         [0m| 02:39 Iteration:  100 / 3000 [  3%]  (Warmup)
-chain 2 |[33m▉         [0m| 02:40 Iteration:  100 / 3000 [  3%]  (Warmup)[A
-
-chain 3 |[33m█▎        [0m| 03:02 Iteration:  200 / 3000 [  6%]  (Warmup)[A[A
-
-
-chain 4 |[33m▉         [0m| 03:08 Iteration:  100 / 3000 [  3%]  (Warmup)[A[A[Achain 1 |[33m█▎        [0m| 03:22 Iteration:  200 / 3000 [  6%]  (Warmup)
-chain 2 |[33m█▎        [0m| 03:24 Iteration:  200 / 3000 [  6%]  (Warmup)[A
-
-chain 3 |[33m█▌        [0m| 03:39 Iteration:  300 / 3000 [ 10%]  (Warmup)[A[A
-
-
-chain 4 |[33m█▎        [0m| 03:51 Iteration:  200 / 3000 [  6%]  (Warmup)[A[A[Achain 1 |[33m█▌        [0m| 04:07 Iteration:  300 / 3000 [ 10%]  (Warmup)
-chain 2 |[33m█▌        [0m| 04:09 Iteration:  300 / 3000 [ 10%]  (Warmup)[A
-
-chain 3 |[33m█▉        [0m| 04:20 Iteration:  400 / 3000 [ 13%]  (Warmup)[A[A
-
-
-chain 4 |[33m█▌        [0m| 04:29 Iteration:  300 / 3000 [ 10%]  (Warmup)[A[A[Achain 1 |[33m█▉        [0m| 04:45 Iteration:  400 / 3000 [ 13%]  (Warmup)
-chain 2 |[33m█▉        [0m| 04:59 Iteration:  400 / 3000 [ 13%]  (Warmup)[A
-
-chain 3 |[33m██▏       [0m| 05:02 Iteration:  500 / 3000 [ 16%]  (Warmup)[A[A
-
-
-chain 4 |[33m█▉        [0m| 05:12 Iteration:  400 / 3000 [ 13%]  (Warmup)[A[A[Achain 1 |[33m██▏       [0m| 05:16 Iteration:  500 / 3000 [ 16%]  (Warmup)
-
-chain 3 |[33m██▌       [0m| 05:37 Iteration:  600 / 3000 [ 20%]  (Warmup)[A[A
-chain 2 |[33m██▏       [0m| 05:38 Iteration:  500 / 3000 [ 16%]  (Warmup)[Achain 1 |[33m██▌       [0m| 05:55 Iteration:  600 / 3000 [ 20%]  (Warmup)
-
-
-chain 4 |[33m██▏       [0m| 05:55 Iteration:  500 / 3000 [ 16%]  (Warmup)[A[A[A
-
-chain 3 |[33m██▊       [0m| 06:14 Iteration:  700 / 3000 [ 23%]  (Warmup)[A[A
-chain 2 |[33m██▌       [0m| 06:15 Iteration:  600 / 3000 [ 20%]  (Warmup)[Achain 1 |[33m██▊       [0m| 06:31 Iteration:  700 / 3000 [ 23%]  (Warmup)
-
-
-chain 4 |[33m██▌       [0m| 06:47 Iteration:  600 / 3000 [ 20%]  (Warmup)[A[A[A
-
-chain 3 |[33m███▏      [0m| 06:50 Iteration:  800 / 3000 [ 26%]  (Warmup)[A[A
-chain 2 |[33m██▊       [0m| 06:55 Iteration:  700 / 3000 [ 23%]  (Warmup)[Achain 1 |[33m███▏      [0m| 07:05 Iteration:  800 / 3000 [ 26%]  (Warmup)
-
-
-chain 4 |[33m██▊       [0m| 07:17 Iteration:  700 / 3000 [ 23%]  (Warmup)[A[A[A
-
-chain 3 |[33m███▍      [0m| 07:24 Iteration:  900 / 3000 [ 30%]  (Warmup)[A[A
-
-chain 3 |[34m███▊      [0m| 07:24 Iteration: 1000 / 3000 [ 33%]  (Warmup)[A[A
-chain 2 |[33m███▏      [0m| 07:35 Iteration:  800 / 3000 [ 26%]  (Warmup)[Achain 1 |[33m███▍      [0m| 07:53 Iteration:  900 / 3000 [ 30%]  (Warmup)chain 1 |[34m███▊      [0m| 07:54 Iteration: 1000 / 3000 [ 33%]  (Warmup)
-
-
-chain 4 |[33m███▏      [0m| 07:56 Iteration:  800 / 3000 [ 26%]  (Warmup)[A[A[A
-
-chain 3 |[34m████      [0m| 08:02 Iteration: 1001 / 3000 [ 33%]  (Sampling)[A[A
-chain 2 |[33m███▍      [0m| 08:20 Iteration:  900 / 3000 [ 30%]  (Warmup)[A
-chain 2 |[34m███▊      [0m| 08:20 Iteration: 1000 / 3000 [ 33%]  (Warmup)[Achain 1 |[34m████      [0m| 08:31 Iteration: 1001 / 3000 [ 33%]  (Sampling)
-
-
-chain 4 |[33m███▍      [0m| 08:33 Iteration:  900 / 3000 [ 30%]  (Warmup)[A[A[A
-
-
-chain 4 |[34m███▊      [0m| 08:33 Iteration: 1000 / 3000 [ 33%]  (Warmup)[A[A[A
-
-chain 3 |[34m████▍     [0m| 08:41 Iteration: 1100 / 3000 [ 36%]  (Sampling)[A[A
-
-
-chain 4 |[34m████      [0m| 09:05 Iteration: 1001 / 3000 [ 33%]  (Sampling)[A[A[A
-chain 2 |[34m████      [0m| 09:05 Iteration: 1001 / 3000 [ 33%]  (Sampling)[Achain 1 |[34m████▍     [0m| 09:08 Iteration: 1100 / 3000 [ 36%]  (Sampling)
-
-chain 3 |[34m████▋     [0m| 09:18 Iteration: 1200 / 3000 [ 40%]  (Sampling)[A[A
-
-
-chain 4 |[34m████▍     [0m| 09:36 Iteration: 1100 / 3000 [ 36%]  (Sampling)[A[A[Achain 1 |[34m████▋     [0m| 09:41 Iteration: 1200 / 3000 [ 40%]  (Sampling)
-chain 2 |[34m████▍     [0m| 09:54 Iteration: 1100 / 3000 [ 36%]  (Sampling)[A
-
-chain 3 |[34m█████     [0m| 09:58 Iteration: 1300 / 3000 [ 43%]  (Sampling)[A[A
-
-
-chain 4 |[34m████▋     [0m| 10:02 Iteration: 1200 / 3000 [ 40%]  (Sampling)[A[A[Achain 1 |[34m█████     [0m| 10:17 Iteration: 1300 / 3000 [ 43%]  (Sampling)
-
-
-chain 4 |[34m█████     [0m| 10:31 Iteration: 1300 / 3000 [ 43%]  (Sampling)[A[A[A
-
-chain 3 |[34m█████▎    [0m| 10:36 Iteration: 1400 / 3000 [ 46%]  (Sampling)[A[A
-chain 2 |[34m████▋     [0m| 10:43 Iteration: 1200 / 3000 [ 40%]  (Sampling)[Achain 1 |[34m█████▎    [0m| 10:52 Iteration: 1400 / 3000 [ 46%]  (Sampling)
-
-
-chain 4 |[34m█████▎    [0m| 11:00 Iteration: 1400 / 3000 [ 46%]  (Sampling)[A[A[A
-
-chain 3 |[34m█████▋    [0m| 11:12 Iteration: 1500 / 3000 [ 50%]  (Sampling)[A[Achain 1 |[34m█████▋    [0m| 11:26 Iteration: 1500 / 3000 [ 50%]  (Sampling)
-
-
-chain 4 |[34m█████▋    [0m| 11:28 Iteration: 1500 / 3000 [ 50%]  (Sampling)[A[A[A
-chain 2 |[34m█████     [0m| 11:32 Iteration: 1300 / 3000 [ 43%]  (Sampling)[A
-
-chain 3 |[34m█████▉    [0m| 11:52 Iteration: 1600 / 3000 [ 53%]  (Sampling)[A[A
-
-
-chain 4 |[34m█████▉    [0m| 11:59 Iteration: 1600 / 3000 [ 53%]  (Sampling)[A[A[Achain 1 |[34m█████▉    [0m| 12:00 Iteration: 1600 / 3000 [ 53%]  (Sampling)
-chain 2 |[34m█████▎    [0m| 12:18 Iteration: 1400 / 3000 [ 46%]  (Sampling)[A
-
-
-chain 4 |[34m██████▎   [0m| 12:27 Iteration: 1700 / 3000 [ 56%]  (Sampling)[A[A[A
-
-chain 3 |[34m██████▎   [0m| 12:30 Iteration: 1700 / 3000 [ 56%]  (Sampling)[A[Achain 1 |[34m██████▎   [0m| 12:34 Iteration: 1700 / 3000 [ 56%]  (Sampling)
-
-
-chain 4 |[34m██████▌   [0m| 12:54 Iteration: 1800 / 3000 [ 60%]  (Sampling)[A[A[A
-chain 2 |[34m█████▋    [0m| 13:03 Iteration: 1500 / 3000 [ 50%]  (Sampling)[A
-
-chain 3 |[34m██████▌   [0m| 13:06 Iteration: 1800 / 3000 [ 60%]  (Sampling)[A[Achain 1 |[34m██████▌   [0m| 13:07 Iteration: 1800 / 3000 [ 60%]  (Sampling)
-
-
-chain 4 |[34m██████▉   [0m| 13:21 Iteration: 1900 / 3000 [ 63%]  (Sampling)[A[A[A
-
-chain 3 |[34m██████▉   [0m| 13:36 Iteration: 1900 / 3000 [ 63%]  (Sampling)[A[Achain 1 |[34m██████▉   [0m| 13:39 Iteration: 1900 / 3000 [ 63%]  (Sampling)
-chain 2 |[34m█████▉    [0m| 13:46 Iteration: 1600 / 3000 [ 53%]  (Sampling)[A
-
-
-chain 4 |[34m███████▏  [0m| 13:47 Iteration: 2000 / 3000 [ 66%]  (Sampling)[A[A[A
-
-chain 3 |[34m███████▏  [0m| 14:08 Iteration: 2000 / 3000 [ 66%]  (Sampling)[A[Achain 1 |[34m███████▏  [0m| 14:11 Iteration: 2000 / 3000 [ 66%]  (Sampling)
-
-
-chain 4 |[34m███████▌  [0m| 14:11 Iteration: 2100 / 3000 [ 70%]  (Sampling)[A[A[A
-chain 2 |[34m██████▎   [0m| 14:24 Iteration: 1700 / 3000 [ 56%]  (Sampling)[A
-
-
-chain 4 |[34m███████▊  [0m| 14:35 Iteration: 2200 / 3000 [ 73%]  (Sampling)[A[A[A
-
-chain 3 |[34m███████▌  [0m| 14:36 Iteration: 2100 / 3000 [ 70%]  (Sampling)[A[Achain 1 |[34m███████▌  [0m| 14:41 Iteration: 2100 / 3000 [ 70%]  (Sampling)
-
-
-chain 4 |[34m████████▏ [0m| 14:57 Iteration: 2300 / 3000 [ 76%]  (Sampling)[A[A[A
-chain 2 |[34m██████▌   [0m| 15:03 Iteration: 1800 / 3000 [ 60%]  (Sampling)[A
-
-chain 3 |[34m███████▊  [0m| 15:04 Iteration: 2200 / 3000 [ 73%]  (Sampling)[A[Achain 1 |[34m███████▊  [0m| 15:08 Iteration: 2200 / 3000 [ 73%]  (Sampling)
-
-
-chain 4 |[34m████████▍ [0m| 15:21 Iteration: 2400 / 3000 [ 80%]  (Sampling)[A[A[A
-
-chain 3 |[34m████████▏ [0m| 15:33 Iteration: 2300 / 3000 [ 76%]  (Sampling)[A[Achain 1 |[34m████████▏ [0m| 15:36 Iteration: 2300 / 3000 [ 76%]  (Sampling)
-chain 2 |[34m██████▉   [0m| 15:36 Iteration: 1900 / 3000 [ 63%]  (Sampling)[A
-
-
-chain 4 |[34m████████▊ [0m| 15:41 Iteration: 2500 / 3000 [ 83%]  (Sampling)[A[A[Achain 1 |[34m████████▍ [0m| 16:01 Iteration: 2400 / 3000 [ 80%]  (Sampling)
-
-
-chain 4 |[34m█████████ [0m| 16:01 Iteration: 2600 / 3000 [ 86%]  (Sampling)[A[A[A
-
-chain 3 |[34m████████▍ [0m| 16:02 Iteration: 2400 / 3000 [ 80%]  (Sampling)[A[A
-chain 2 |[34m███████▏  [0m| 16:08 Iteration: 2000 / 3000 [ 66%]  (Sampling)[A
-
-
-chain 4 |[34m█████████▍[0m| 16:21 Iteration: 2700 / 3000 [ 90%]  (Sampling)[A[A[Achain 1 |[34m████████▊ [0m| 16:22 Iteration: 2500 / 3000 [ 83%]  (Sampling)
-
-chain 3 |[34m████████▊ [0m| 16:25 Iteration: 2500 / 3000 [ 83%]  (Sampling)[A[A
-chain 2 |[34m███████▌  [0m| 16:39 Iteration: 2100 / 3000 [ 70%]  (Sampling)[A
-
-
-chain 4 |[34m█████████▋[0m| 16:40 Iteration: 2800 / 3000 [ 93%]  (Sampling)[A[A[Achain 1 |[34m█████████ [0m| 16:42 Iteration: 2600 / 3000 [ 86%]  (Sampling)
-
-chain 3 |[34m█████████ [0m| 16:46 Iteration: 2600 / 3000 [ 86%]  (Sampling)[A[A
-
-
-chain 4 |[34m██████████[0m| 16:57 Iteration: 2900 / 3000 [ 96%]  (Sampling)[A[A[Achain 1 |[34m█████████▍[0m| 17:01 Iteration: 2700 / 3000 [ 90%]  (Sampling)
-chain 2 |[34m███████▊  [0m| 17:05 Iteration: 2200 / 3000 [ 73%]  (Sampling)[A
-
-chain 3 |[34m█████████▍[0m| 17:06 Iteration: 2700 / 3000 [ 90%]  (Sampling)[A[Achain 1 |[34m█████████▋[0m| 17:20 Iteration: 2800 / 3000 [ 93%]  (Sampling)
-
-chain 3 |[34m█████████▋[0m| 17:25 Iteration: 2800 / 3000 [ 93%]  (Sampling)[A[A
-chain 2 |[34m████████▏ [0m| 17:29 Iteration: 2300 / 3000 [ 76%]  (Sampling)[Achain 1 |[34m██████████[0m| 17:39 Iteration: 2900 / 3000 [ 96%]  (Sampling)
-
-chain 3 |[34m██████████[0m| 17:46 Iteration: 2900 / 3000 [ 96%]  (Sampling)[A[A
-chain 2 |[34m████████▍ [0m| 17:50 Iteration: 2400 / 3000 [ 80%]  (Sampling)[A
-chain 2 |[34m████████▊ [0m| 18:12 Iteration: 2500 / 3000 [ 83%]  (Sampling)[A
-chain 2 |[34m█████████ [0m| 18:36 Iteration: 2600 / 3000 [ 86%]  (Sampling)[A
-chain 2 |[34m█████████▍[0m| 18:57 Iteration: 2700 / 3000 [ 90%]  (Sampling)[A
-chain 2 |[34m█████████▋[0m| 19:19 Iteration: 2800 / 3000 [ 93%]  (Sampling)[A
-chain 2 |[34m██████████[0m| 19:43 Iteration: 2900 / 3000 [ 96%]  (Sampling)[Achain 1 |[34m██████████[0m| 19:43 Sampling completed                       
-chain 2 |[34m██████████[0m| 19:43 Sampling completed                       
-chain 3 |[34m██████████[0m| 19:43 Sampling completed                       
-chain 4 |[34m██████████[0m| 19:43 Sampling completed                       
-15:23:36 - cmdstanpy - INFO - CmdStan done processing.
-15:23:36 - cmdstanpy - WARNING - Non-fatal error during sampling:
-Exception: lkj_corr_cholesky_lpdf: Random variable[4] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-	Exception: lkj_corr_cholesky_lpdf: Random variable[4] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-	Exception: lkj_corr_cholesky_lpdf: Random variable[2] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-	Exception: lkj_corr_cholesky_lpdf: Random variable[3] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-Exception: lkj_corr_cholesky_lpdf: Random variable[2] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-	Exception: lkj_corr_cholesky_lpdf: Random variable[2] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-	Exception: lkj_corr_cholesky_lpdf: Random variable[2] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-	Exception: lkj_corr_cholesky_lpdf: Random variable[2] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-Exception: lkj_corr_cholesky_lpdf: Random variable[2] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-	Exception: lkj_corr_cholesky_lpdf: Random variable[2] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-	Exception: lkj_corr_cholesky_lpdf: Random variable[4] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-	Exception: lkj_corr_cholesky_lpdf: Random variable[2] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-	Exception: lkj_corr_cholesky_lpdf: Random variable[2] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-Exception: lkj_corr_cholesky_lpdf: Random variable[3] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-	Exception: lkj_corr_cholesky_lpdf: Random variable[3] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-	Exception: lkj_corr_cholesky_lpdf: Random variable[2] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-	Exception: lkj_corr_cholesky_lpdf: Random variable[3] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-	Exception: lkj_corr_cholesky_lpdf: Random variable[4] is 0, but must be positive! (in 'beh_model.stan', line 109, column 4 to column 31)
-Consider re-running with show_console=True if the above output is unclear!
