@@ -156,22 +156,40 @@ function make_nan_from_qc(kernel_norm, qc_dict, mouse_ids)
     return kernel_norm
 end
 
+function make_nan_from_qc_d0(kernel_norm, qc_dict, mouse_ids)
+    for mouse in mouse_ids
+        for evn in event_names[1:2]
+            for reg in ["NAcc", "DMS", "DLS"]
+                qc_reg = qc_dict[mouse].pretrain[!, Symbol("QC_$(reg)")][1]
+                if qc_reg == 0
+                    kernel_norm[mouse][reg][evn] .= NaN
+                end
+            end
+        end
+    end
+
+    return kernel_norm
+end
+
+
 kernel_norm = make_nan_from_qc(kernel_norm, qc_dict, mouse_ids)
 neu_day0_results = load("/jukebox/witten/yoel/saved_results/day0_neural_results.jld2", "results");
 day0_mice = 26:43;
+day0_kernel_norm = make_nan_from_qc_d0(neu_day0_results.kernel_norm, qc_dict, 26:43)
 
 
 
 # figure 3.D
-day0_contra_dls_norms = hcat([neu_day0_results.kernel_norm[f]["DLS"][dms_ipsi_map[f]] for f in day0_mice]...)'
+day0_contra_dls_norms = hcat([day0_kernel_norm[f]["DLS"][dms_ipsi_map[f]] for f in day0_mice]...)'
 day0_contra_dls_norms_conmod = day0_contra_dls_norms[:, 4] .- day0_contra_dls_norms[:, 1]
-strong_dls = day0_contra_dls_norms_conmod .>= median(day0_contra_dls_norms_conmod)
+not_nan_idx = .!isnan.(day0_contra_dls_norms_conmod)
+strong_dls = day0_contra_dls_norms_conmod .>= median(day0_contra_dls_norms_conmod[not_nan_idx])
 weak_dls = .!strong_dls
 strong_color="darkgreen"
 weak_color="lightgreen"
 bin_width = 0.2  # Example bin width; adjust as necessary
-bins_strong = collect(median(day0_contra_dls_norms_conmod):bin_width:maximum(day0_contra_dls_norms_conmod))
-bins_weak = collect(minimum(day0_contra_dls_norms_conmod):bin_width:median(day0_contra_dls_norms_conmod))
+bins_strong = collect(median(day0_contra_dls_norms_conmod[not_nan_idx]):bin_width:maximum(day0_contra_dls_norms_conmod[not_nan_idx]))
+bins_weak = collect(minimum(day0_contra_dls_norms_conmod[not_nan_idx]):bin_width:median(day0_contra_dls_norms_conmod[not_nan_idx]))
 
 fig, ax = plt.subplots()
 ax.hist(
@@ -183,8 +201,8 @@ ax.hist(
      bins=bins_weak, color=weak_color, edgecolor="white", alpha=1, label="Weak"
     )
 ax.set_ylabel("Counts")
-ax.axvline(median(day0_contra_dls_norms_conmod), lw=2, linestyle="--", color="black", label="_nolegend_")
-#plt.legend()
+ax.axvline(median(day0_contra_dls_norms_conmod[not_nan_idx]), lw=2, linestyle="--", color="black", label="_nolegend_")
+plt.legend()
 plt.savefig("strong_weak_dls_day0_hist.pdf", transparent=true, bbox_inches="tight")
 
 function get_side_map_multiplier(side_label, region_label)
@@ -389,14 +407,15 @@ anova(chist_contra_model, type=3)
 NAcc version
 """
 
-day0_contra_nacc_norms = hcat([neu_day0_results.kernel_norm[f]["NAcc"][dms_ipsi_map[f]] for f in day0_mice]...)'
+day0_contra_nacc_norms = hcat([day0_kernel_norm[f]["NAcc"][dms_ipsi_map[f]] for f in day0_mice]...)'
 day0_contra_nacc_norms_conmod = day0_contra_nacc_norms[:, 4] .- day0_contra_nacc_norms[:, 1]
-strong_nacc = day0_contra_nacc_norms_conmod .>= median(day0_contra_nacc_norms_conmod)
+not_nan_idx = .!isnan.(day0_contra_nacc_norms_conmod)
+strong_nacc = day0_contra_nacc_norms_conmod .>= median(day0_contra_nacc_norms_conmod[not_nan_idx])
 weak_nacc = .!strong_nacc
 strong_color="darkblue"
 weak_color="lightblue"
-bins_strong = range(0, stop=maximum(day0_contra_nacc_norms_conmod), length=6)  # Bins for strong (>= 0)
-bins_weak = range(minimum(day0_contra_nacc_norms_conmod), stop=median(day0_contra_nacc_norms_conmod), length=6)  # Bins for weak (< 0)
+bins_strong = range(0, stop=maximum(day0_contra_nacc_norms_conmod[not_nan_idx]), length=6)  # Bins for strong (>= 0)
+bins_weak = range(minimum(day0_contra_nacc_norms_conmod[not_nan_idx]), stop=median(day0_contra_nacc_norms_conmod[not_nan_idx]), length=6)  # Bins for weak (< 0)
 
 fig, ax = plt.subplots()
 ax.hist(
@@ -408,8 +427,7 @@ ax.hist(
      bins=bins_weak, color=weak_color, edgecolor="white", alpha=1, label="Weak"
     )
 ax.set_ylabel("Counts")
-ax.axvline(median(day0_contra_nacc_norms_conmod), lw=2, linestyle="--", color="black", label="_nolegend_")
-ax.set_xticks([-1, 0, 1])
+ax.axvline(median(day0_contra_nacc_norms_conmod[not_nan_idx]), lw=2, linestyle="--", color="black", label="_nolegend_")
 plt.legend()
 plt.savefig("strong_weak_nacc_day0_hist.pdf", transparent=true, bbox_inches="tight")
 
