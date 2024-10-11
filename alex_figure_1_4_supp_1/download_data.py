@@ -4,8 +4,7 @@ import pandas as pd
 from one.api import ONE
 import os
 
-one = ONE(silent=True)
-one = ONE()
+one=ONE(base_url='https://openalyx.internationalbrainlab.org/', password='international')
 
 def bleach_correct(nacc, avg_window=60, fr=25):
     """
